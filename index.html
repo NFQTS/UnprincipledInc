@@ -1,730 +1,349 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Unprincipled Inc.</title>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>InfoFi • Resurrection Phase</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700;900&family=Roboto+Mono:wght@300;400&display=swap" rel="stylesheet">
+
 <style>
-* { margin:0; padding:0; box-sizing:border-box; }
-
-body {
-  height: 100vh;
-  background: radial-gradient(ellipse at bottom, #0b0018 0%, #020006 55%, #000 100%);
-  color: #f4f7ff;
-  font-family: Inter, system-ui, -apple-system, sans-serif;
-  overflow: hidden;
-  display: grid;
-  place-items: center;
-}
-
-/* ––––– STARFIELD ––––– */
-.stars {
-  position: fixed;
-  inset: 0;
-  pointer-events: none;
-  transition: transform 1.2s ease, opacity 1.2s ease;
-}
-
-.star {
-  position: absolute;
-  background: white;
-  border-radius: 50%;
-  opacity: 0;
-  animation: twinkle 7s infinite;
-}
-
-@keyframes twinkle {
-  0%,100% { opacity: 0; }
-  50% { opacity: 0.9; }
-}
-
-.shooting-star {
-  position: absolute;
-  width: 3px;
-  height: 90px;
-  background: linear-gradient(transparent, #9adfff, #ffffff, transparent);
-  transform: rotate(35deg);
-  filter: blur(1px);
-  animation: fall linear infinite;
-}
-
-@keyframes fall {
-  0% { opacity: 0; transform: translateY(-120vh) translateX(40vw) rotate(35deg); }
-  15% { opacity: 1; }
-  60% { opacity: 0.9; }
-  100% { opacity: 0; transform: translateY(140vh) translateX(-90vw) rotate(35deg); }
-}
-
-/* ––––– HERO ––––– */
-.content {
-  text-align: center;
-  z-index: 10;
-  padding: 24px;
-  max-width: 820px;
-  transition: opacity 0.9s ease, transform 0.9s ease;
-}
-
-h1 {
-  font-size: clamp(3.5rem, 8vw, 7.2rem);
-  font-weight: 800;
-  letter-spacing: -0.045em;
-  margin-bottom: 0.6rem;
-  background: linear-gradient(120deg, #d4e6ff, #9adfff, #ffffff);
-  background-size: 200% auto;
-  -webkit-background-clip: text;
-  background-clip: text;
-  color: transparent;
-  animation: gradientFlow 10s linear infinite;
-}
-
-@keyframes gradientFlow {
-  0% { background-position: 0% center; }
-  100% { background-position: 200% center; }
-}
-
-.subtitle {
-  font-size: clamp(1.1rem, 3vw, 1.35rem);
-  letter-spacing: 0.02em;
-  opacity: 0.75;
-  margin-bottom: 2.4rem;
-}
-
-/* ––––– FIXED TAGLINE ––––– */
-.tagline {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 0.3rem;
-  font-size: clamp(2rem, 5vw, 3rem);
-  font-weight: 500;
-  letter-spacing: -0.02em;
-  min-height: 4rem;
-  overflow: visible;
-}
-
-.flip-line {
-  height: auto;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
-.flip-inline {
-  position: relative;
-  display: inline-block;
-  min-width: 280px;
-  height: 1.2em;
-  line-height: 1.2em;
-}
-
-.flip-inline .word {
-  position: absolute;
-  left: 0;
-  right: 0;
-  text-align: center;
-  opacity: 0;
-  transform: translateY(100%);
-  transition: all 0.7s cubic-bezier(0.22, 1, 0.36, 1);
-  font-weight: 600;
-  color: #9adfff;
-}
-
-.flip-inline .word.active {
-  opacity: 1;
-  transform: translateY(0%);
-}
-
-.static {
-  opacity: 0.85;
-  font-weight: 400;
-}
-
-/* ––––– PAYWALL ––––– */
-.paywall {
-  margin-top: 3.8rem;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 0.6rem;
-  text-align: center;
-}
-
-.paywall-title {
-  font-size: 0.95rem;
-  letter-spacing: 0.18em;
-  text-transform: uppercase;
-  opacity: 0.85;
-}
-
-.paywall-subtitle {
-  font-size: 0.85rem;
-  opacity: 0.55;
-}
-
-.paywall-action {
-  margin-top: 0.6rem;
-  font-size: 0.85rem;
-  letter-spacing: 0.18em;
-  text-transform: uppercase;
-  color: #cfefff;
-  cursor: pointer;
-  position: relative;
-  opacity: 0.85;
-  transition: opacity 0.4s ease, transform 0.4s ease;
-}
-
-.paywall-action::after {
-  content: "";
-  position: absolute;
-  left: 0;
-  bottom: -10px;
-  width: 100%;
-  height: 1px;
-  background: linear-gradient(90deg, transparent, #9adfff, transparent);
-  opacity: 0.35;
-}
-
-.paywall-action:hover {
-  opacity: 1;
-  transform: translateY(-1px);
-}
-
-/* ––––– REPORT ––––– */
-.report {
-  position: fixed;
-  inset: 0;
-  display: grid;
-  place-items: center;
-  background: radial-gradient(circle at center, #020006, #000);
-  color: #f4f7ff;
-  opacity: 0;
-  pointer-events: none;
-  transition: opacity 1s ease;
-  z-index: 20;
-}
-
-.report.show {
-  opacity: 1;
-  pointer-events: auto;
-}
-
-.card {
-  max-width: 780px;
-  width: 92%;
-  padding: 52px 44px;
-  border-radius: 32px;
-  background: rgba(10, 15, 30, 0.85);
-  backdrop-filter: blur(24px);
-  box-shadow: 0 50px 140px rgba(0,0,0,0.65);
-  text-align: center;
-}
-
-.card-title {
-  font-size: clamp(2rem, 5vw, 3rem);
-  font-weight: 700;
-  letter-spacing: -0.03em;
-  margin-bottom: 1.1rem;
-  background: linear-gradient(120deg, #d4e6ff, #9adfff, #ffffff);
-  -webkit-background-clip: text;
-  color: transparent;
-}
-
-.card-subtitle {
-  font-size: 1.05rem;
-  opacity: 0.72;
-  margin-bottom: 2.8rem;
-  line-height: 1.65;
-}
-
-/* ––––– DATA GRID ––––– */
-.data-grid {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 18px;
-  margin-bottom: 3.2rem;
-}
-
-@media (max-width: 640px) {
-  .data-grid {
-    grid-template-columns: 1fr;
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
   }
-}
 
-.data-card {
-  padding: 18px 20px;
-  border-radius: 18px;
-  background: rgba(154,223,255,0.06);
-  border: 1px solid rgba(154,223,255,0.14);
-  text-align: left;
-}
+  html, body {
+    height: 100%;
+    overflow: hidden;
+    background: #000;
+    font-family: 'Orbitron', sans-serif;
+    color: #e0fffe;
+    background-image: 
+      radial-gradient(circle at 15% 50%, rgba(0,255,245,0.06) 0%, transparent 25%),
+      radial-gradient(circle at 85% 30%, rgba(255,0,230,0.04) 0%, transparent 30%);
+  }
 
-.data-label {
-  font-size: 0.7rem;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
-  opacity: 0.55;
-  margin-bottom: 0.4rem;
-}
+  #bg-canvas {
+    position: fixed;
+    inset: 0;
+    z-index: -2;
+  }
 
-.data-value {
-  font-size: 0.95rem;
-  opacity: 0.92;
-}
+  .overlay-grid {
+    position: fixed;
+    inset: 0;
+    background: 
+      linear-gradient(to right, rgba(0,255,245,0.025) 1px, transparent 1px),
+      linear-gradient(to bottom, rgba(0,255,245,0.025) 1px, transparent 1px);
+    background-size: 60px 60px;
+    pointer-events: none;
+    z-index: -1;
+    opacity: 0.7;
+    animation: gridDrift 60s linear infinite;
+  }
 
-/* ––––– MONETIZATION ––––– */
-.monetize-section {
-  margin-bottom: 3rem;
-  padding-top: 1.6rem;
-  border-top: 1px solid rgba(154,223,255,0.12);
-}
+  @keyframes gridDrift {
+    0% { transform: translate(0,0); }
+    100% { transform: translate(-60px, -60px); }
+  }
 
-.monetize-title {
-  font-size: 0.75rem;
-  letter-spacing: 0.18em;
-  text-transform: uppercase;
-  opacity: 0.5;
-  margin-bottom: 1.4rem;
-}
+  .hero {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    padding: 2rem;
+  }
 
-.slider-wrap {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 0.7rem;
-}
+  .glitch {
+    font-size: clamp(2.6rem, 7vw, 5.8rem);
+    font-weight: 900;
+    color: #00fff5;
+    text-shadow: 
+      0 0 10px #00fff5,
+      0 0 30px #00fff5aa,
+      2px 0 0 #ff00ea,
+      -2px 0 0 #00ffea;
+    letter-spacing: 0.08em;
+    line-height: 0.92;
+    animation: glitch 4s infinite;
+    position: relative;
+  }
 
-.monetize-label {
-  font-size: 0.95rem;
-  opacity: 0.9;
-  transition: color 0.3s ease;
-}
+  .glitch span {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0.8;
+  }
 
-.monetize-details {
-  font-size: 0.7rem;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
-  opacity: 0.5;
-  margin-top: 0.4rem;
-  cursor: pointer;
-  transition: opacity 0.3s ease;
-}
+  .glitch span:nth-child(1) {
+    left: 2px;
+    text-shadow: -2px 0 #ff00ea;
+    clip: rect(0,900px,0,0);
+    animation: glitch-anim 3s infinite linear alternate-reverse;
+  }
 
-.monetize-details:hover { opacity: 0.9; }
+  .glitch span:nth-child(2) {
+    left: -2px;
+    text-shadow: 2px 0 #00ffea;
+    clip: rect(0,900px,0,0);
+    animation: glitch-anim2 2.5s infinite linear alternate-reverse;
+  }
 
-.slider {
-  -webkit-appearance: none;
-  width: 260px;
-  height: 2px;
-  background: linear-gradient(90deg, rgba(154,223,255,0.25), rgba(154,223,255,0.9));
-  border-radius: 2px;
-  outline: none;
-  opacity: 0.8;
-  transition: opacity 0.3s ease;
-}
+  @keyframes glitch {
+    0%,100% { text-shadow: 0 0 10px #00fff5, 2px 0 #ff00ea, -2px 0 #00ffea; }
+    20% { text-shadow: 5px 0 #ff00ea, -5px 0 #00ffea; }
+    40% { text-shadow: -5px 0 #00ffea, 5px 0 #ff00ea; }
+  }
 
-.slider:hover { opacity: 1; }
+  @keyframes glitch-anim {
+    0% { clip: rect(42px, 9999px, 84px, 0); transform: skew(0.4deg); }
+    5% { clip: rect(17px, 9999px, 59px, 0); transform: skew(0.8deg); }
+    /* ... many more random keyframes ... you can find full glitch sets online */
+  }
 
-.slider::-webkit-slider-thumb {
-  -webkit-appearance: none;
-  width: 18px;
-  height: 18px;
-  border-radius: 50%;
-  background: #9adfff;
-  box-shadow: 0 0 18px rgba(154,223,255,0.9);
-  cursor: pointer;
-  border: none;
-}
+  @keyframes glitch-anim2 {
+    0% { clip: rect(65px, 9999px, 119px, 0); }
+    5% { clip: rect(38px, 9999px, 73px, 0); }
+    /* add more... */
+  }
 
-.slider::-moz-range-thumb {
-  width: 18px;
-  height: 18px;
-  border-radius: 50%;
-  background: #9adfff;
-  box-shadow: 0 0 18px rgba(154,223,255,0.9);
-  cursor: pointer;
-  border: none;
-}
+  .subtitle {
+    font-family: 'Roboto Mono', monospace;
+    font-size: clamp(1.3rem, 3.5vw, 2rem);
+    color: #a0ffe0;
+    margin: 1.5rem 0 3.5rem;
+    opacity: 0;
+    transform: translateY(30px);
+    animation: typeReveal 4s steps(40) forwards 1.8s, fadeIn 1s forwards 1.8s;
+    white-space: pre;
+    overflow: hidden;
+    border-right: 3px solid #00fff5;
+  }
 
-/* ––––– CONTINUE BUTTON ––––– */
-.action-btn {
-  margin-top: 2.2rem;
-  font-size: 0.85rem;
-  letter-spacing: 0.18em;
-  text-transform: uppercase;
-  color: #cfefff;
-  text-decoration: none;
-  position: relative;
-  display: inline-block;
-  opacity: 0;
-  pointer-events: none;
-  transition: opacity 0.4s ease, transform 0.4s ease;
-  cursor: pointer;
-}
+  @keyframes typeReveal {
+    from { width: 0; }
+    to   { width: 100%; }
+  }
 
-.action-btn.show {
-  opacity: 0.85;
-  pointer-events: auto;
-}
+  @keyframes fadeIn { to { opacity:1; transform:translateY(0); } }
 
-.action-btn:hover { opacity: 1; transform: translateY(-1px); }
+  .mint-btn {
+    position: relative;
+    padding: 1.4rem 3.8rem;
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: #000;
+    background: linear-gradient(90deg, #00fff5, #ff00ea, #00fff5);
+    background-size: 200% 100%;
+    border: none;
+    border-radius: 16px;
+    cursor: pointer;
+    overflow: hidden;
+    box-shadow: 0 0 40px rgba(0,255,245,0.4);
+    transition: all 0.4s;
+    z-index: 10;
+  }
 
-.action-btn::after {
-  content: "";
-  position: absolute;
-  left: 0;
-  bottom: -10px;
-  width: 100%;
-  height: 1px;
-  background: linear-gradient(90deg, transparent, #9adfff, transparent);
-  opacity: 0.35;
-}
+  .mint-btn:hover {
+    transform: translateY(-4px) scale(1.04);
+    box-shadow: 0 0 70px rgba(0,255,245,0.7), 0 0 120px rgba(255,0,234,0.4);
+  }
 
-/* ––––– LAUNCH LOADING SCREEN ––––– */
-.launch-screen {
-  position: fixed;
-  inset: 0;
-  display: none;
-  grid-template-rows: 1fr auto;
-  place-items: center;
-  background: radial-gradient(ellipse at center, #0b0018 0%, #020006 75%, #000 100%);
-  z-index: 50;
-  text-align: center;
-  color: #9adfff;
-  font-family: Inter, sans-serif;
-}
+  .mint-btn::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.25), transparent);
+    transform: translateX(-100%);
+    transition: 0.7s;
+  }
 
-.launch-screen.show {
-  display: grid;
-}
+  .mint-btn:hover::before { transform: translateX(100%); }
 
-.launch-stars {
-  position: absolute;
-  inset: 0;
-  pointer-events: none;
-}
+  .reveal-layer {
+    position: absolute;
+    inset: 0;
+    background: rgba(0,0,0,0.7);
+    color: #00fff5;
+    font-size: 1.4rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transform: translateY(100%);
+    transition: transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+  }
 
-.launch-text {
-  font-size: 1.1rem;
-  font-weight: 500;
-  margin-bottom: 0.6rem;
-  z-index: 10;
-}
+  .mint-btn.clicked .reveal-layer { transform: translateY(0); }
 
-.launch-subtext {
-  font-size: 0.85rem;
-  opacity: 0.65;
-  margin-bottom: 1rem;
-  z-index: 10;
-}
+  .scanline {
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 120%;
+    background: linear-gradient(to bottom, transparent, rgba(0,255,245,0.15), transparent);
+    animation: scan 8s linear infinite;
+    pointer-events: none;
+  }
 
-.launch-easter {
-  font-size: 0.75rem;
-  opacity: 0.5;
-  cursor: pointer;
-  text-decoration: underline;
-  z-index: 10;
-}
+  @keyframes scan { 0% { transform: translateY(-100%); } 100% { transform: translateY(100%); } }
 
-/* ––––– ROLE SELECTION SCREEN ––––– */
-.role-screen {
-  position: fixed;
-  inset: 0;
-  display: grid;
-  place-items: center;
-  background: radial-gradient(circle at center, #020006, #000);
-  color: #f4f7ff;
-  opacity: 0;
-  pointer-events: none;
-  transition: opacity 0.6s ease;
-  z-index: 30;
-}
+  .footer {
+    position: absolute;
+    bottom: 1.8rem;
+    left: 50%;
+    transform: translateX(-50%);
+    color: #444;
+    font-size: 0.95rem;
+    font-family: 'Roboto Mono', monospace;
+    letter-spacing: 1px;
+  }
 
-.role-screen.show {
-  opacity: 1;
-  pointer-events: auto;
-}
-
-.role-buttons {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  gap: 1rem;
-  margin-top: 1.8rem;
-}
-
-.role-btn {
-  padding: 0.8rem 1.6rem;
-  border-radius: 12px;
-  border: none;
-  font-size: 1rem;
-  font-weight: 600;
-  cursor: pointer;
-  background: linear-gradient(120deg, #9adfff, #d4e6ff);
-  color: #020006;
-  box-shadow: 0 6px 18px rgba(154, 223, 255, 0.5);
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
-  animation: floatBtn 3s ease-in-out infinite;
-}
-
-.role-btn:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 12px 28px rgba(154, 223, 255, 0.7);
-}
-
-@keyframes floatBtn {
-  0%, 100% { transform: translateY(0); }
-  50% { transform: translateY(-6px); }
-}
-
-/* ––––– RESPONSIVE FIXES ––––– */
-@media (max-width: 500px) {
-  .flip-inline { min-width: 220px; }
-  .role-btn { width: 100%; }
-}
-.investor-cta {
-  font-size: 0.85rem;
-  opacity: 0.6;
-  margin-top: 1rem;
-  cursor: default;
-  text-align: center;
-  color: #cfefff;
-}
-
-#investorLink {
-  text-decoration: underline;
-  cursor: pointer;
-  color: #9adfff;
-  transition: opacity 0.3s ease, transform 0.3s ease;
-}
-
-#investorLink:hover {
-  opacity: 1;
-  transform: translateY(-1px);
-}
+  @media (max-width: 768px) {
+    .glitch { font-size: clamp(2.4rem, 9vw, 4.2rem); }
+    .subtitle { font-size: 1.35rem; }
+    .mint-btn { padding: 1.2rem 2.8rem; font-size: 1.3rem; }
+  }
 </style>
 </head>
 <body>
 
-<div class="stars" id="stars"></div>
+<div id="bg-canvas"></div>
+<div class="overlay-grid"></div>
 
-<!-- HERO -->
-<div class="content" id="content">
-  <div class="subtitle">A platform for finding and creating opportunities</div>
-  <div class="tagline">
-    <div class="flip-line">
-      <span class="flip-inline">
-        <span class="word active">Opportunities</span>
-        <span class="word">Talent</span>
-      </span>
-    </div>
-    <div class="static">on demand</div>
-  </div>
+<div class="hero">
+  <h1 class="glitch" aria-label="InfoFi didn’t die...">
+    <span>InfoFi didn’t die...</span>
+    InfoFi didn’t die...
+    <span>InfoFi didn’t die...</span>
+  </h1>
+  
+  <h1 class="glitch" aria-label="It has just begun..." style="margin-top: -0.8rem;">
+    <span>It has just begun...</span>
+    It has just begun...
+    <span>It has just begun...</span>
+  </h1>
 
-  <!-- PAYWALL -->
-  <div class="paywall">
-    <div class="paywall-title">Private access.</div>
-    <div class="paywall-subtitle">Explore beta for free.</div>
-    <div class="paywall-action" id="cta">Request Access</div>
-  </div>
+  <p class="subtitle" id="typing">Something   is   coming   ................................</p>
+
+  <button class="mint-btn" id="mintBtn">
+    RESERVE YOUR SPOT
+    <div class="reveal-layer">PRESALE 100 / 10,000 • PROOF OF DEMAND</div>
+    <div class="scanline"></div>
+  </button>
 </div>
 
-<!-- REPORT -->
-<div class="report" id="report">
-  <div class="card">
-    <div class="card-title">What we can see</div>
-    <div class="card-subtitle">
-      This is the essential information your browser and our servers receive when you visit.
-    </div>
-    <div class="data-grid" id="dataGrid"></div>
-
-    <div class="monetize-section">
-      <div class="monetize-title">Want to monetize your data?</div>
-      <div class="slider-wrap">
-        <input type="range" min="0" max="1" step="1" value="0" class="slider" id="monetizeSlider">
-        <div class="monetize-label" id="monetizeLabel">Maximize privacy</div>
-        <div class="monetize-details" id="monetizeDetails">Details</div>
-      </div>
-    </div>
-
-    <div class="action-btn show" id="continueToLaunch">Next</div>
-  </div>
-</div>
-
-<!-- ROLE SELECTION SCREEN -->
-<div class="role-screen" id="roleScreen">
-  <div class="card">
-    <div class="card-title">Which would you enjoy?</div>
-    <div class="role-buttons">
-      <button class="role-btn" data-role="Research">Research</button>
-      <button class="role-btn" data-role="Production">Production</button>
-      <button class="role-btn" data-role="Services">Services</button>
-    </div>
-  </div>
-</div>
-
-<!-- LAUNCH LOADING -->
-<div class="launch-screen" id="launchScreen">
-  <div class="launch-stars" id="launchStars"></div>
-  <div>
-    <div class="launch-text">Finding opportunities for you...</div>
-    <div class="launch-easter" id="easterEgg">Share your # to get 3 early access codes</div>
-    <div class="investor-cta" id="investorCTA">
-  Investors: Our product is our pitch — if you enjoy it, <span id="investorLink">click here</span>.
-</div>
-  </div>
+<div class="footer">
+  Phase 0 • Limited • Decentralized
 </div>
 
 <script>
-// ---------- STARFIELD ----------
-const stars = document.getElementById('stars');
-for (let i = 0; i < 200; i++) {
-  const s = document.createElement('div');
-  s.className = 'star';
-  const size = Math.random() * 3 + 0.5;
-  s.style.width = size + 'px';
-  s.style.height = size + 'px';
-  s.style.left = Math.random() * 100 + 'vw';
-  s.style.top = Math.random() * 100 + 'vh';
-  s.style.animationDelay = Math.random() * 7 + 's';
-  stars.appendChild(s);
-}
+// Enhanced node network with mouse attraction
+const canvas = document.getElementById('bg-canvas');
+const ctx = canvas.getContext('2d');
+canvas.width = window.innerWidth;
+canvas.height = window.innerHeight;
 
-function spawnShootingStar() {
-  const star = document.createElement('div');
-  star.className = 'shooting-star';
-  star.style.left = Math.random() * 120 + 'vw';
-  star.style.animationDuration = (Math.random() * 2.5 + 2.8) + 's';
-  document.body.appendChild(star);
-  star.addEventListener('animationend', () => star.remove());
-}
-setInterval(spawnShootingStar, 1400);
-spawnShootingStar();
+const nodes = [];
+const nodeCount = 90;
+const mouse = { x: null, y: null, radius: 180 };
 
-// ---------- LAUNCH SCREEN STARS ----------
-const launchStars = document.getElementById('launchStars');
-function initLaunchStars() {
-  launchStars.innerHTML = '';
-  for (let i = 0; i < 150; i++) {
-    const s = document.createElement('div');
-    s.className = 'star';
-    const size = Math.random() * 3 + 0.5;
-    s.style.width = size + 'px';
-    s.style.height = size + 'px';
-    s.style.left = Math.random() * 100 + 'vw';
-    s.style.top = Math.random() * 100 + 'vh';
-    s.style.animationDelay = Math.random() * 7 + 's';
-    launchStars.appendChild(s);
-  }
-}
-
-function spawnLaunchShootingStar() {
-  const star = document.createElement('div');
-  star.className = 'shooting-star';
-  star.style.left = Math.random() * 120 + 'vw';
-  star.style.animationDuration = (Math.random() * 2 + 2) + 's';
-  launchStars.appendChild(star);
-  star.addEventListener('animationend', () => star.remove());
-}
-
-let launchInterval;
-
-// ---------- WORD FLIP ----------
-const words = document.querySelectorAll('.flip-inline .word');
-let wordIndex = 0;
-setInterval(() => {
-  words.forEach(w => w.classList.remove('active'));
-  words[wordIndex].classList.add('active');
-  wordIndex = (wordIndex + 1) % words.length;
-}, 2400);
-
-// ---------- SPOOFED USER DATA ----------
-function getUserData() {
-  const screenData = window.screen;
-  const tz = Intl.DateTimeFormat().resolvedOptions().timeZone;
-
-  return [
-    { label: "Approximate location", value: "Los Angeles, California" },
-    { label: "IP address", value: "192.168.42.87" },
-    { label: "Device", value: "MacBook Pro · macOS" },
-    { label: "Browser", value: "Chrome 121" },
-    { label: "Language & timezone", value: `English (US) · ${tz}` },
-    { label: "Display", value: `${screenData.width} × ${screenData.height} · ${window.devicePixelRatio || 1}x` }
-  ];
-}
-
-// ---------- CTA FLOW ----------
-const cta = document.getElementById('cta');
-const content = document.getElementById('content');
-const report = document.getElementById('report');
-const dataGrid = document.getElementById('dataGrid');
-const monetizeSlider = document.getElementById('monetizeSlider');
-const monetizeLabel = document.getElementById('monetizeLabel');
-const monetizeDetails = document.getElementById('monetizeDetails');
-const continueToLaunch = document.getElementById('continueToLaunch');
-const launchScreen = document.getElementById('launchScreen');
-const easterEgg = document.getElementById('easterEgg');
-const roleScreen = document.getElementById('roleScreen');
-const roleButtons = document.querySelectorAll('.role-btn');
-
-cta.addEventListener('click', () => {
-  content.style.opacity = '0';
-  content.style.transform = 'scale(0.96)';
-  
-  const data = getUserData();
-  dataGrid.innerHTML = "";
-  data.forEach(item => {
-    const card = document.createElement('div');
-    card.className = 'data-card';
-    card.innerHTML = `
-      <div class="data-label">${item.label}</div>
-      <div class="data-value">${item.value}</div>
-    `;
-    dataGrid.appendChild(card);
+for(let i = 0; i < nodeCount; i++){
+  nodes.push({
+    x: Math.random() * canvas.width,
+    y: Math.random() * canvas.height,
+    vx: (Math.random()-0.5)*0.6,
+    vy: (Math.random()-0.5)*0.6,
+    baseRadius: 1.8 + Math.random()*3.2,
+    radius: 0
   });
-  
-  setTimeout(() => report.classList.add('show'), 600);
+}
+
+window.addEventListener('mousemove', e => {
+  mouse.x = e.x;
+  mouse.y = e.y;
 });
 
-// ---------- MONETIZATION ----------
-monetizeSlider.addEventListener('input', () => {
-  if (monetizeSlider.value === "1") {
-    monetizeLabel.textContent = "Pay me for my data, please!";
-    monetizeLabel.style.color = "#9adfff";
-  } else {
-    monetizeLabel.textContent = "Maximize privacy";
-    monetizeLabel.style.color = "";
-  }
+window.addEventListener('resize', () => {
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
 });
 
-monetizeDetails.addEventListener('click', () => {
-  alert("If enabled, anonymized, aggregated usage patterns help match you with higher-value opportunities — never personal identity or private content. We also have developed a fun new way to use it to make advertising enjoyable for you 🤫.");
-});
+function animate(){
+  ctx.fillStyle = 'rgba(0,0,0,0.08)';
+  ctx.fillRect(0,0,canvas.width,canvas.height);
 
-// ---------- NEXT TO ROLE SELECTION ----------
-continueToLaunch.addEventListener('click', () => {
-  report.classList.remove('show');
-  roleScreen.classList.add('show');
-});
+  nodes.forEach(n => {
+    // mouse attraction
+    if(mouse.x && mouse.y){
+      const dx = mouse.x - n.x;
+      const dy = mouse.y - n.y;
+      const dist = Math.sqrt(dx*dx + dy*dy);
+      if(dist < mouse.radius){
+        n.x += dx * 0.008;
+        n.y += dy * 0.008;
+      }
+    }
 
-// ---------- ROLE SELECTION ----------
-roleButtons.forEach(btn => {
-  btn.addEventListener('click', () => {
-    const selectedRole = btn.getAttribute('data-role');
-    console.log("Selected Role:", selectedRole);
+    // bounce
+    n.x += n.vx;
+    n.y += n.vy;
+    if(n.x < 0 || n.x > canvas.width) n.vx *= -1;
+    if(n.y < 0 || n.y > canvas.height) n.vy *= -1;
 
-    roleScreen.classList.remove('show');
-    launchScreen.classList.add('show');
-    
-    // Initialize launch screen stars and shooting stars
-    initLaunchStars();
-    launchInterval = setInterval(spawnLaunchShootingStar, 800);
+    // glow radius pulse
+    n.radius = n.baseRadius + Math.sin(Date.now()*0.001 + n.x*0.01)*1.2;
+
+    ctx.beginPath();
+    ctx.arc(n.x, n.y, n.radius, 0, Math.PI*2);
+    ctx.fillStyle = '#00fff5';
+    ctx.shadowColor = '#00fff5';
+    ctx.shadowBlur = 15;
+    ctx.fill();
+    ctx.shadowBlur = 0;
   });
-});
 
-// ---------- EASTER EGG ----------
-easterEgg.addEventListener('click', () => {
-  alert("Send your # to unlock 3 exclusive early access codes!");
-});
+  // connections
+  ctx.strokeStyle = 'rgba(0,255,245,0.09)';
+  ctx.lineWidth = 1;
+  for(let i = 0; i < nodes.length; i++){
+    for(let j = i+1; j < nodes.length; j++){
+      const dx = nodes[i].x - nodes[j].x;
+      const dy = nodes[j].y - nodes[i].y;
+      const dist = Math.hypot(dx, dy);
+      if(dist < 140){
+        ctx.globalAlpha = (140 - dist) / 140 * 0.6;
+        ctx.beginPath();
+        ctx.moveTo(nodes[i].x, nodes[i].y);
+        ctx.lineTo(nodes[j].x, nodes[j].y);
+        ctx.stroke();
+      }
+    }
+  }
+  ctx.globalAlpha = 1;
+
+  requestAnimationFrame(animate);
+}
+animate();
+
+// Button interaction
+document.getElementById('mintBtn').onclick = () => {
+  const btn = document.getElementById('mintBtn');
+  btn.classList.add('clicked');
+  
+  // fake loading + glitch burst
+  setTimeout(() => {
+    alert('Spot reserved • Watch your wallet/email — the real drop is coming...');
+  }, 1200);
+};
 </script>
 </body>
 </html>
