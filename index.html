@@ -397,31 +397,24 @@ h1 {
   display: grid;
 }
 
-.rocket {
-  width: 60px;
-  height: 120px;
-  background: linear-gradient(to top, #9adfff 0%, #fff 50%);
-  clip-path: polygon(50% 0%, 0% 70%, 100% 70%);
-  animation: launch 3s ease-in-out infinite;
-  margin-bottom: 2rem;
-}
-
-@keyframes launch {
-  0% { transform: translateY(0) rotate(0deg); }
-  50% { transform: translateY(-60px) rotate(-5deg); }
-  100% { transform: translateY(0) rotate(0deg); }
+.launch-stars {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
 }
 
 .launch-text {
   font-size: 1.1rem;
   font-weight: 500;
   margin-bottom: 0.6rem;
+  z-index: 10;
 }
 
 .launch-subtext {
   font-size: 0.85rem;
   opacity: 0.65;
   margin-bottom: 1rem;
+  z-index: 10;
 }
 
 .launch-easter {
@@ -429,6 +422,7 @@ h1 {
   opacity: 0.5;
   cursor: pointer;
   text-decoration: underline;
+  z-index: 10;
 }
 
 /* ––––– ROLE SELECTION SCREEN ––––– */
@@ -486,6 +480,26 @@ h1 {
 @media (max-width: 500px) {
   .flip-inline { min-width: 220px; }
   .role-btn { width: 100%; }
+}
+.investor-cta {
+  font-size: 0.85rem;
+  opacity: 0.6;
+  margin-top: 1rem;
+  cursor: default;
+  text-align: center;
+  color: #cfefff;
+}
+
+#investorLink {
+  text-decoration: underline;
+  cursor: pointer;
+  color: #9adfff;
+  transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+#investorLink:hover {
+  opacity: 1;
+  transform: translateY(-1px);
 }
 </style>
 </head>
@@ -550,10 +564,15 @@ h1 {
 
 <!-- LAUNCH LOADING -->
 <div class="launch-screen" id="launchScreen">
-  <div class="rocket"></div>
-  <div class="launch-text">Finding opportunities for you...</div>
-  <div class="launch-subtext">Estimated wait time: under 24 hours</div>
-  <div class="launch-easter" id="easterEgg">Share your # to get 3 early access codes</div>
+  <div class="launch-stars" id="launchStars"></div>
+  <div>
+    <div class="launch-text">Finding opportunities for you...</div>
+    <div class="launch-subtext">Estimated wait time: under 24 hours</div>
+    <div class="launch-easter" id="easterEgg">Share your # to get 3 early access codes</div>
+    <div class="investor-cta" id="investorCTA">
+  Investors: Our product is our pitch — if you enjoy it, <span id="investorLink">click here</span>.
+</div>
+  </div>
 </div>
 
 <script>
@@ -574,14 +593,41 @@ for (let i = 0; i < 200; i++) {
 function spawnShootingStar() {
   const star = document.createElement('div');
   star.className = 'shooting-star';
-  star.style.left
-    star.style.left = Math.random() * 120 + 'vw';
+  star.style.left = Math.random() * 120 + 'vw';
   star.style.animationDuration = (Math.random() * 2.5 + 2.8) + 's';
   document.body.appendChild(star);
   star.addEventListener('animationend', () => star.remove());
 }
 setInterval(spawnShootingStar, 1400);
 spawnShootingStar();
+
+// ---------- LAUNCH SCREEN STARS ----------
+const launchStars = document.getElementById('launchStars');
+function initLaunchStars() {
+  launchStars.innerHTML = '';
+  for (let i = 0; i < 150; i++) {
+    const s = document.createElement('div');
+    s.className = 'star';
+    const size = Math.random() * 3 + 0.5;
+    s.style.width = size + 'px';
+    s.style.height = size + 'px';
+    s.style.left = Math.random() * 100 + 'vw';
+    s.style.top = Math.random() * 100 + 'vh';
+    s.style.animationDelay = Math.random() * 7 + 's';
+    launchStars.appendChild(s);
+  }
+}
+
+function spawnLaunchShootingStar() {
+  const star = document.createElement('div');
+  star.className = 'shooting-star';
+  star.style.left = Math.random() * 120 + 'vw';
+  star.style.animationDuration = (Math.random() * 2 + 2) + 's';
+  launchStars.appendChild(star);
+  star.addEventListener('animationend', () => star.remove());
+}
+
+let launchInterval;
 
 // ---------- WORD FLIP ----------
 const words = document.querySelectorAll('.flip-inline .word');
@@ -658,17 +704,21 @@ monetizeDetails.addEventListener('click', () => {
 // ---------- NEXT TO ROLE SELECTION ----------
 continueToLaunch.addEventListener('click', () => {
   report.classList.remove('show');
-  roleScreen.classList.add('show'); // show role selection instead of launch screen
+  roleScreen.classList.add('show');
 });
 
 // ---------- ROLE SELECTION ----------
 roleButtons.forEach(btn => {
   btn.addEventListener('click', () => {
     const selectedRole = btn.getAttribute('data-role');
-    console.log("Selected Role:", selectedRole); // Send to backend if needed
+    console.log("Selected Role:", selectedRole);
 
     roleScreen.classList.remove('show');
     launchScreen.classList.add('show');
+    
+    // Initialize launch screen stars and shooting stars
+    initLaunchStars();
+    launchInterval = setInterval(spawnLaunchShootingStar, 800);
   });
 });
 
