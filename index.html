@@ -1,349 +1,402 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>InfoFi • Resurrection Phase</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700;900&family=Roboto+Mono:wght@300;400&display=swap" rel="stylesheet">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Hiring Portal</title>
+  <style>
+    html, body {
+      margin: 0;
+      padding: 0;
+      background: black;
+      color: white;
+      font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+      overflow: hidden;
+      height: 100%;
+    }
 
-<style>
-  * {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-  }
+    canvas {
+      position: fixed;
+      top: 0;
+      left: 0;
+      z-index: 0;
+      pointer-events: none;
+    }
 
-  html, body {
-    height: 100%;
-    overflow: hidden;
-    background: #000;
-    font-family: 'Orbitron', sans-serif;
-    color: #e0fffe;
-    background-image: 
-      radial-gradient(circle at 15% 50%, rgba(0,255,245,0.06) 0%, transparent 25%),
-      radial-gradient(circle at 85% 30%, rgba(255,0,230,0.04) 0%, transparent 30%);
-  }
+    .screen {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+      text-align: center;
+      opacity: 0;
+      transform: scale(1.02);
+      transition: opacity 1s ease, transform 1s ease;
+      z-index: 1;
+      pointer-events: none;
+    }
 
-  #bg-canvas {
-    position: fixed;
-    inset: 0;
-    z-index: -2;
-  }
+    .screen.active {
+      opacity: 1;
+      transform: scale(1);
+      pointer-events: auto;
+    }
 
-  .overlay-grid {
-    position: fixed;
-    inset: 0;
-    background: 
-      linear-gradient(to right, rgba(0,255,245,0.025) 1px, transparent 1px),
-      linear-gradient(to bottom, rgba(0,255,245,0.025) 1px, transparent 1px);
-    background-size: 60px 60px;
-    pointer-events: none;
-    z-index: -1;
-    opacity: 0.7;
-    animation: gridDrift 60s linear infinite;
-  }
+    h1 {
+      font-weight: 300;
+      letter-spacing: 1.2px;
+      font-size: 2.4rem;
+      margin-bottom: 60px;
+    }
 
-  @keyframes gridDrift {
-    0% { transform: translate(0,0); }
-    100% { transform: translate(-60px, -60px); }
-  }
+    .choices {
+      display: flex;
+      gap: 100px;
+    }
 
-  .hero {
-    position: absolute;
-    inset: 0;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    text-align: center;
-    padding: 2rem;
-  }
+    .choice {
+      font-size: 1.5rem;
+      font-weight: 200;
+      letter-spacing: 2px;
+      cursor: pointer;
+      position: relative;
+      transition: transform 0.4s ease, opacity 0.4s ease;
+    }
 
-  .glitch {
-    font-size: clamp(2.6rem, 7vw, 5.8rem);
-    font-weight: 900;
-    color: #00fff5;
-    text-shadow: 
-      0 0 10px #00fff5,
-      0 0 30px #00fff5aa,
-      2px 0 0 #ff00ea,
-      -2px 0 0 #00ffea;
-    letter-spacing: 0.08em;
-    line-height: 0.92;
-    animation: glitch 4s infinite;
-    position: relative;
-  }
+    .choice::after {
+      content: "";
+      position: absolute;
+      left: 0;
+      bottom: -8px;
+      width: 100%;
+      height: 1px;
+      background: white;
+      transform: scaleX(0);
+      transform-origin: center;
+      transition: transform 0.4s ease;
+    }
 
-  .glitch span {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    opacity: 0.8;
-  }
+    .choice:hover {
+      transform: translateY(-4px) scale(1.02);
+      opacity: 0.9;
+    }
 
-  .glitch span:nth-child(1) {
-    left: 2px;
-    text-shadow: -2px 0 #ff00ea;
-    clip: rect(0,900px,0,0);
-    animation: glitch-anim 3s infinite linear alternate-reverse;
-  }
+    .choice:hover::after {
+      transform: scaleX(1);
+    }
 
-  .glitch span:nth-child(2) {
-    left: -2px;
-    text-shadow: 2px 0 #00ffea;
-    clip: rect(0,900px,0,0);
-    animation: glitch-anim2 2.5s infinite linear alternate-reverse;
-  }
+    /* Role Screen */
+    .roles {
+      display: flex;
+      gap: 60px;
+      margin-bottom: 50px;
+    }
 
-  @keyframes glitch {
-    0%,100% { text-shadow: 0 0 10px #00fff5, 2px 0 #ff00ea, -2px 0 #00ffea; }
-    20% { text-shadow: 5px 0 #ff00ea, -5px 0 #00ffea; }
-    40% { text-shadow: -5px 0 #00ffea, 5px 0 #ff00ea; }
-  }
+    .role-card {
+      border: 1px solid rgba(255,255,255,0.2);
+      padding: 40px 30px;
+      width: 220px;
+      cursor: pointer;
+      position: relative;
+      transition: transform 0.5s ease, border 0.5s ease, box-shadow 0.5s ease;
+      backdrop-filter: blur(4px);
+    }
 
-  @keyframes glitch-anim {
-    0% { clip: rect(42px, 9999px, 84px, 0); transform: skew(0.4deg); }
-    5% { clip: rect(17px, 9999px, 59px, 0); transform: skew(0.8deg); }
-    /* ... many more random keyframes ... you can find full glitch sets online */
-  }
+    .role-card::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(120deg, transparent, rgba(255,255,255,0.1), transparent);
+      opacity: 0;
+      transition: opacity 0.5s ease;
+    }
 
-  @keyframes glitch-anim2 {
-    0% { clip: rect(65px, 9999px, 119px, 0); }
-    5% { clip: rect(38px, 9999px, 73px, 0); }
-    /* add more... */
-  }
+    .role-card:hover {
+      transform: translateY(-10px) scale(1.03);
+      border-color: rgba(255,255,255,0.6);
+      box-shadow: 0 0 30px rgba(255,255,255,0.08);
+    }
 
-  .subtitle {
-    font-family: 'Roboto Mono', monospace;
-    font-size: clamp(1.3rem, 3.5vw, 2rem);
-    color: #a0ffe0;
-    margin: 1.5rem 0 3.5rem;
-    opacity: 0;
-    transform: translateY(30px);
-    animation: typeReveal 4s steps(40) forwards 1.8s, fadeIn 1s forwards 1.8s;
-    white-space: pre;
-    overflow: hidden;
-    border-right: 3px solid #00fff5;
-  }
+    .role-card:hover::before {
+      opacity: 1;
+    }
 
-  @keyframes typeReveal {
-    from { width: 0; }
-    to   { width: 100%; }
-  }
+    .role-card.selected {
+      border-color: white;
+      box-shadow: 0 0 40px rgba(255,255,255,0.15);
+    }
 
-  @keyframes fadeIn { to { opacity:1; transform:translateY(0); } }
+    .role-title {
+      font-size: 1.3rem;
+      font-weight: 300;
+      letter-spacing: 1.4px;
+      margin-bottom: 10px;
+    }
 
-  .mint-btn {
-    position: relative;
-    padding: 1.4rem 3.8rem;
-    font-size: 1.5rem;
-    font-weight: 700;
-    color: #000;
-    background: linear-gradient(90deg, #00fff5, #ff00ea, #00fff5);
-    background-size: 200% 100%;
-    border: none;
-    border-radius: 16px;
-    cursor: pointer;
-    overflow: hidden;
-    box-shadow: 0 0 40px rgba(0,255,245,0.4);
-    transition: all 0.4s;
-    z-index: 10;
-  }
+    .role-sub {
+      font-size: 0.85rem;
+      opacity: 0.6;
+      letter-spacing: 1px;
+    }
 
-  .mint-btn:hover {
-    transform: translateY(-4px) scale(1.04);
-    box-shadow: 0 0 70px rgba(0,255,245,0.7), 0 0 120px rgba(255,0,234,0.4);
-  }
+    textarea {
+      width: 480px;
+      max-width: 90vw;
+      height: 120px;
+      background: transparent;
+      border: 1px solid rgba(255,255,255,0.3);
+      color: white;
+      font-size: 1rem;
+      padding: 14px;
+      letter-spacing: 0.6px;
+      outline: none;
+      resize: none;
+      transition: border 0.4s ease, box-shadow 0.4s ease;
+    }
 
-  .mint-btn::before {
-    content: "";
-    position: absolute;
-    inset: 0;
-    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.25), transparent);
-    transform: translateX(-100%);
-    transition: 0.7s;
-  }
+    textarea:focus {
+      border-color: white;
+      box-shadow: 0 0 20px rgba(255,255,255,0.1);
+    }
 
-  .mint-btn:hover::before { transform: translateX(100%); }
+    .submit {
+      margin-top: 40px;
+      font-size: 1.1rem;
+      letter-spacing: 2px;
+      cursor: pointer;
+      position: relative;
+      transition: transform 0.4s ease, opacity 0.4s ease;
+    }
 
-  .reveal-layer {
-    position: absolute;
-    inset: 0;
-    background: rgba(0,0,0,0.7);
-    color: #00fff5;
-    font-size: 1.4rem;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transform: translateY(100%);
-    transition: transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
-  }
+    .submit::after {
+      content: "";
+      position: absolute;
+      left: 0;
+      bottom: -8px;
+      width: 100%;
+      height: 1px;
+      background: white;
+      transform: scaleX(0);
+      transform-origin: center;
+      transition: transform 0.4s ease;
+    }
 
-  .mint-btn.clicked .reveal-layer { transform: translateY(0); }
+    .submit:hover {
+      transform: translateY(-4px) scale(1.02);
+      opacity: 0.9;
+    }
 
-  .scanline {
-    position: absolute;
-    top: 0; left: 0; right: 0;
-    height: 120%;
-    background: linear-gradient(to bottom, transparent, rgba(0,255,245,0.15), transparent);
-    animation: scan 8s linear infinite;
-    pointer-events: none;
-  }
+    .submit:hover::after {
+      transform: scaleX(1);
+    }
 
-  @keyframes scan { 0% { transform: translateY(-100%); } 100% { transform: translateY(100%); } }
+    /* Modal for "No" */
+    #rick-modal {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.98);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 100;
+      cursor: pointer;
+    }
 
-  .footer {
-    position: absolute;
-    bottom: 1.8rem;
-    left: 50%;
-    transform: translateX(-50%);
-    color: #444;
-    font-size: 0.95rem;
-    font-family: 'Roboto Mono', monospace;
-    letter-spacing: 1px;
-  }
+    #rick-modal.active {
+      display: flex;
+    }
 
-  @media (max-width: 768px) {
-    .glitch { font-size: clamp(2.4rem, 9vw, 4.2rem); }
-    .subtitle { font-size: 1.35rem; }
-    .mint-btn { padding: 1.2rem 2.8rem; font-size: 1.3rem; }
-  }
-</style>
+    .rick-container {
+      position: relative;
+      width: 90vw;
+      max-width: 800px;
+      aspect-ratio: 16 / 9;
+      box-shadow: 0 0 60px rgba(255,255,255,0.15);
+    }
+
+    .close-btn {
+      position: absolute;
+      top: -50px;
+      right: 0;
+      font-size: 1.6rem;
+      cursor: pointer;
+      opacity: 0.7;
+      transition: opacity 0.3s;
+    }
+
+    .close-btn:hover {
+      opacity: 1;
+    }
+
+    iframe {
+      width: 100%;
+      height: 100%;
+      border: none;
+    }
+  </style>
 </head>
 <body>
+  <canvas id="stars"></canvas>
 
-<div id="bg-canvas"></div>
-<div class="overlay-grid"></div>
+  <!-- Screen 1 -->
+  <div class="screen active" id="screen1">
+    <h1>Are you ready to work right now?</h1>
+    <div class="choices">
+      <div class="choice" id="yes">Yes</div>
+      <div class="choice" id="no">No</div>
+    </div>
+  </div>
 
-<div class="hero">
-  <h1 class="glitch" aria-label="InfoFi didn’t die...">
-    <span>InfoFi didn’t die...</span>
-    InfoFi didn’t die...
-    <span>InfoFi didn’t die...</span>
-  </h1>
-  
-  <h1 class="glitch" aria-label="It has just begun..." style="margin-top: -0.8rem;">
-    <span>It has just begun...</span>
-    It has just begun...
-    <span>It has just begun...</span>
-  </h1>
+  <!-- Screen 2 -->
+  <div class="screen" id="screen2">
+    <h1>Select your role</h1>
+    <div class="roles">
+      <div class="role-card" data-role="Research">
+        <div class="role-title">Research</div>
+        <div class="role-sub">Discovery • Analysis • Insight</div>
+      </div>
+      <div class="role-card" data-role="Production">
+        <div class="role-title">Production</div>
+        <div class="role-sub">Creation • Execution • Delivery</div>
+      </div>
+      <div class="role-card" data-role="Services">
+        <div class="role-title">Services</div>
+        <div class="role-sub">Support • Strategy • Operations</div>
+      </div>
+    </div>
 
-  <p class="subtitle" id="typing">Something   is   coming   ................................</p>
+    <textarea id="interests" placeholder="List your hobbies, interests, passions..."></textarea>
 
-  <button class="mint-btn" id="mintBtn">
-    RESERVE YOUR SPOT
-    <div class="reveal-layer">PRESALE 100 / 10,000 • PROOF OF DEMAND</div>
-    <div class="scanline"></div>
-  </button>
-</div>
+    <div class="submit" id="submit">Continue</div>
+  </div>
 
-<div class="footer">
-  Phase 0 • Limited • Decentralized
-</div>
+  <!-- Rick Modal -->
+  <div id="rick-modal">
+    <div class="rick-container">
+      <div class="close-btn">×</div>
+      <iframe 
+        src="https://www.youtube.com/embed/dQw4w9WgXcQ?autoplay=1&mute=1&loop=1&playlist=dQw4w9WgXcQ&rel=0&controls=0" 
+        allow="autoplay; encrypted-media" 
+        allowfullscreen>
+      </iframe>
+    </div>
+  </div>
 
-<script>
-// Enhanced node network with mouse attraction
-const canvas = document.getElementById('bg-canvas');
-const ctx = canvas.getContext('2d');
-canvas.width = window.innerWidth;
-canvas.height = window.innerHeight;
+  <script>
+    // ── STARFIELD ────────────────────────────────────────────────
+    const canvas = document.getElementById("stars");
+    const ctx = canvas.getContext("2d");
+    let width, height;
+    let stars = [];
 
-const nodes = [];
-const nodeCount = 90;
-const mouse = { x: null, y: null, radius: 180 };
+    function resize() {
+      width = canvas.width = window.innerWidth;
+      height = canvas.height = window.innerHeight;
+    }
 
-for(let i = 0; i < nodeCount; i++){
-  nodes.push({
-    x: Math.random() * canvas.width,
-    y: Math.random() * canvas.height,
-    vx: (Math.random()-0.5)*0.6,
-    vy: (Math.random()-0.5)*0.6,
-    baseRadius: 1.8 + Math.random()*3.2,
-    radius: 0
-  });
-}
+    window.addEventListener("resize", resize);
+    resize();
 
-window.addEventListener('mousemove', e => {
-  mouse.x = e.x;
-  mouse.y = e.y;
-});
-
-window.addEventListener('resize', () => {
-  canvas.width = window.innerWidth;
-  canvas.height = window.innerHeight;
-});
-
-function animate(){
-  ctx.fillStyle = 'rgba(0,0,0,0.08)';
-  ctx.fillRect(0,0,canvas.width,canvas.height);
-
-  nodes.forEach(n => {
-    // mouse attraction
-    if(mouse.x && mouse.y){
-      const dx = mouse.x - n.x;
-      const dy = mouse.y - n.y;
-      const dist = Math.sqrt(dx*dx + dy*dy);
-      if(dist < mouse.radius){
-        n.x += dx * 0.008;
-        n.y += dy * 0.008;
+    function createStars(count) {
+      stars = [];
+      for (let i = 0; i < count; i++) {
+        stars.push({
+          x: Math.random() * width,
+          y: Math.random() * height,
+          radius: Math.random() * 1.2 + 0.3,
+          speed: Math.random() * 0.4 + 0.08,
+          alpha: Math.random() * 0.7 + 0.3
+        });
       }
     }
 
-    // bounce
-    n.x += n.vx;
-    n.y += n.vy;
-    if(n.x < 0 || n.x > canvas.width) n.vx *= -1;
-    if(n.y < 0 || n.y > canvas.height) n.vy *= -1;
+    createStars(160);
 
-    // glow radius pulse
-    n.radius = n.baseRadius + Math.sin(Date.now()*0.001 + n.x*0.01)*1.2;
-
-    ctx.beginPath();
-    ctx.arc(n.x, n.y, n.radius, 0, Math.PI*2);
-    ctx.fillStyle = '#00fff5';
-    ctx.shadowColor = '#00fff5';
-    ctx.shadowBlur = 15;
-    ctx.fill();
-    ctx.shadowBlur = 0;
-  });
-
-  // connections
-  ctx.strokeStyle = 'rgba(0,255,245,0.09)';
-  ctx.lineWidth = 1;
-  for(let i = 0; i < nodes.length; i++){
-    for(let j = i+1; j < nodes.length; j++){
-      const dx = nodes[i].x - nodes[j].x;
-      const dy = nodes[j].y - nodes[i].y;
-      const dist = Math.hypot(dx, dy);
-      if(dist < 140){
-        ctx.globalAlpha = (140 - dist) / 140 * 0.6;
+    function animateStars() {
+      ctx.clearRect(0, 0, width, height);
+      for (let star of stars) {
+        star.y += star.speed;
+        if (star.y > height) {
+          star.y = -10;
+          star.x = Math.random() * width;
+        }
         ctx.beginPath();
-        ctx.moveTo(nodes[i].x, nodes[i].y);
-        ctx.lineTo(nodes[j].x, nodes[j].y);
-        ctx.stroke();
+        ctx.arc(star.x, star.y, star.radius, 0, Math.PI * 2);
+        ctx.fillStyle = `rgba(255,255,255,${star.alpha})`;
+        ctx.fill();
       }
+      requestAnimationFrame(animateStars);
     }
-  }
-  ctx.globalAlpha = 1;
 
-  requestAnimationFrame(animate);
-}
-animate();
+    animateStars();
 
-// Button interaction
-document.getElementById('mintBtn').onclick = () => {
-  const btn = document.getElementById('mintBtn');
-  btn.classList.add('clicked');
-  
-  // fake loading + glitch burst
-  setTimeout(() => {
-    alert('Spot reserved • Watch your wallet/email — the real drop is coming...');
-  }, 1200);
-};
-</script>
+    // ── SCREEN NAVIGATION ────────────────────────────────────────
+    const screen1 = document.getElementById("screen1");
+    const screen2 = document.getElementById("screen2");
+
+    document.getElementById("yes").addEventListener("click", () => {
+      screen1.classList.remove("active");
+      setTimeout(() => {
+        screen2.classList.add("active");
+      }, 900);
+    });
+
+    // ── RICK MODAL ───────────────────────────────────────────────
+    const rickModal = document.getElementById("rick-modal");
+    const closeBtn = rickModal.querySelector(".close-btn");
+
+    function showRick() {
+      rickModal.classList.add("active");
+      // Optional: tiny delay can help some browsers trigger autoplay after DOM update
+      // setTimeout(() => {}, 100); // usually not needed with mute=1
+    }
+
+    function hideRick() {
+      rickModal.classList.remove("active");
+    }
+
+    document.getElementById("no").addEventListener("click", showRick);
+
+    rickModal.addEventListener("click", hideRick);
+    closeBtn.addEventListener("click", (e) => {
+      e.stopPropagation();
+      hideRick();
+    });
+
+    // ── ROLE SELECTION ───────────────────────────────────────────
+    const roleCards = document.querySelectorAll(".role-card");
+    let selectedRole = null;
+
+    roleCards.forEach(card => {
+      card.addEventListener("click", () => {
+        roleCards.forEach(c => c.classList.remove("selected"));
+        card.classList.add("selected");
+        selectedRole = card.dataset.role;
+      });
+    });
+
+    // ── SUBMIT ───────────────────────────────────────────────────
+    document.getElementById("submit").addEventListener("click", () => {
+      const interests = document.getElementById("interests").value.trim();
+
+      if (!selectedRole) {
+        alert("Please select a role.");
+        return;
+      }
+      if (!interests) {
+        alert("Please tell us about your interests/passions.");
+        return;
+      }
+
+      screen2.innerHTML = `
+        <h1>You're in.</h1>
+        <div style="font-size:1.1rem; opacity:0.7; letter-spacing:1px; margin-top:20px;">
+          We’ll be in touch shortly.
+        </div>
+      `;
+    });
+  </script>
 </body>
 </html>
