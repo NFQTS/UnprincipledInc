@@ -47,17 +47,19 @@
     h1 {
       font-weight: 300;
       letter-spacing: 1.2px;
-      font-size: 2.4rem;
+      font-size: clamp(1.8rem, 5vw, 2.4rem);
       margin-bottom: 60px;
     }
 
     .choices {
       display: flex;
-      gap: 100px;
+      gap: clamp(60px, 12vw, 100px);
+      flex-wrap: wrap;
+      justify-content: center;
     }
 
     .choice {
-      font-size: 1.5rem;
+      font-size: clamp(1.3rem, 4vw, 1.5rem);
       font-weight: 200;
       letter-spacing: 2px;
       cursor: pointer;
@@ -90,14 +92,16 @@
     /* Role Screen */
     .roles {
       display: flex;
-      gap: 60px;
+      gap: clamp(40px, 8vw, 60px);
       margin-bottom: 50px;
+      flex-wrap: wrap;
+      justify-content: center;
     }
 
     .role-card {
       border: 1px solid rgba(255,255,255,0.2);
-      padding: 40px 30px;
-      width: 220px;
+      padding: clamp(25px, 5vw, 40px) clamp(20px, 4vw, 30px);
+      width: clamp(180px, 40vw, 220px);
       cursor: pointer;
       position: relative;
       transition: transform 0.5s ease, border 0.5s ease, box-shadow 0.5s ease;
@@ -129,20 +133,20 @@
     }
 
     .role-title {
-      font-size: 1.3rem;
+      font-size: clamp(1.1rem, 3vw, 1.3rem);
       font-weight: 300;
       letter-spacing: 1.4px;
       margin-bottom: 10px;
     }
 
     .role-sub {
-      font-size: 0.85rem;
+      font-size: clamp(0.75rem, 2vw, 0.85rem);
       opacity: 0.6;
       letter-spacing: 1px;
     }
 
     textarea {
-      width: 480px;
+      width: clamp(320px, 80vw, 480px);
       max-width: 90vw;
       height: 120px;
       background: transparent;
@@ -192,7 +196,7 @@
       transform: scaleX(1);
     }
 
-    /* Modal for "No" */
+    /* Modal for "No" – improved responsive video */
     #rick-modal {
       position: fixed;
       inset: 0;
@@ -202,6 +206,8 @@
       justify-content: center;
       z-index: 100;
       cursor: pointer;
+      padding: 2vh 2vw;
+      box-sizing: border-box;
     }
 
     #rick-modal.active {
@@ -211,19 +217,33 @@
     .rick-container {
       position: relative;
       width: 90vw;
-      max-width: 800px;
+      max-width: 90vh;               /* prevents too wide in portrait */
+      max-height: 80vh;              /* key: caps height so it fits portrait */
       aspect-ratio: 16 / 9;
+      margin: auto;
       box-shadow: 0 0 60px rgba(255,255,255,0.15);
+    }
+
+    /* Fallback for older browsers without aspect-ratio support */
+    @supports not (aspect-ratio: 16 / 9) {
+      .rick-container {
+        padding-top: 56.25%;         /* 9/16 * 100% */
+      }
+      .rick-container iframe {
+        position: absolute;
+        inset: 0;
+      }
     }
 
     .close-btn {
       position: absolute;
-      top: -50px;
+      top: -3rem;
       right: 0;
-      font-size: 1.6rem;
+      font-size: clamp(1.4rem, 4vw, 1.8rem);
       cursor: pointer;
       opacity: 0.7;
       transition: opacity 0.3s;
+      z-index: 101;
     }
 
     .close-btn:hover {
@@ -234,6 +254,15 @@
       width: 100%;
       height: 100%;
       border: none;
+      display: block;
+    }
+
+    /* Extra safety for very tall/narrow viewports */
+    @media (max-aspect-ratio: 3/4) {   /* portrait-ish */
+      .rick-container {
+        width: 95vw;
+        max-height: 70vh;
+      }
     }
   </style>
 </head>
@@ -285,7 +314,7 @@
   </div>
 
   <script>
-    // ── STARFIELD ────────────────────────────────────────────────
+    // STARFIELD (unchanged)
     const canvas = document.getElementById("stars");
     const ctx = canvas.getContext("2d");
     let width, height;
@@ -332,7 +361,7 @@
 
     animateStars();
 
-    // ── SCREEN NAVIGATION ────────────────────────────────────────
+    // SCREEN NAVIGATION
     const screen1 = document.getElementById("screen1");
     const screen2 = document.getElementById("screen2");
 
@@ -343,14 +372,12 @@
       }, 900);
     });
 
-    // ── RICK MODAL ───────────────────────────────────────────────
+    // RICK MODAL
     const rickModal = document.getElementById("rick-modal");
     const closeBtn = rickModal.querySelector(".close-btn");
 
     function showRick() {
       rickModal.classList.add("active");
-      // Optional: tiny delay can help some browsers trigger autoplay after DOM update
-      // setTimeout(() => {}, 100); // usually not needed with mute=1
     }
 
     function hideRick() {
@@ -365,7 +392,7 @@
       hideRick();
     });
 
-    // ── ROLE SELECTION ───────────────────────────────────────────
+    // ROLE SELECTION & SUBMIT (unchanged)
     const roleCards = document.querySelectorAll(".role-card");
     let selectedRole = null;
 
@@ -377,7 +404,6 @@
       });
     });
 
-    // ── SUBMIT ───────────────────────────────────────────────────
     document.getElementById("submit").addEventListener("click", () => {
       const interests = document.getElementById("interests").value.trim();
 
