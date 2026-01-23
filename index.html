@@ -188,6 +188,52 @@
       border-bottom: 1px solid #a0d0ff;
     }
 
+    /* Impact Dashboard Styles */
+    .impact-section {
+      width: 100%;
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 0 20px;
+      box-sizing: border-box;
+    }
+
+    .impact-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: clamp(20px, 4vw, 40px);
+      justify-items: center;
+      margin-bottom: 40px;
+    }
+
+    .impact-card {
+      border: 1px solid rgba(255,255,255,0.2);
+      padding: clamp(20px, 4vw, 30px);
+      width: 100%;
+      max-width: 220px;
+      text-align: center;
+      backdrop-filter: blur(4px);
+      transition: all 0.4s ease;
+    }
+
+    .impact-card:hover {
+      transform: translateY(-6px) scale(1.03);
+      box-shadow: 0 0 40px rgba(255,255,255,0.12);
+    }
+
+    .impact-number {
+      font-size: clamp(2.5rem, 6vw, 3.5rem);
+      font-weight: 200;
+      letter-spacing: 1px;
+      margin-bottom: 8px;
+      display: block;
+    }
+
+    .impact-desc {
+      font-size: clamp(0.9rem, 2.2vw, 1rem);
+      opacity: 0.85;
+      line-height: 1.4;
+    }
+
     /* Rick modal (unchanged) */
     #rick-modal {
       position: fixed;
@@ -268,7 +314,7 @@
     <div class="submit" id="submit">Continue</div>
   </div>
 
-  <!-- Investor Dashboard Screen -->
+  <!-- Investor Dashboard Screen (Roadmap) -->
   <div class="screen" id="screen3">
     <h1>This is an alpha test.</h1>
     <p style="font-size:1.1rem; opacity:0.7; max-width:600px; margin:0 auto 40px; line-height:1.6;">
@@ -282,7 +328,7 @@
           <span class="roadmap-year">2023</span> — AI Supply Chain Tracking PoC <span class="roadmap-check">✅</span>
         </div>
         <div class="roadmap-item">
-          <span class="roadmap-year">2024</span> — Reliable AI Concept-brand tech <span class="roadmap-check">✅</span>
+          <span class="roadmap-year">2024</span> — Reliable AI Concept-to-brand tech PoC <span class="roadmap-check">✅</span>
         </div>
         <div class="roadmap-item">
           <span class="roadmap-year">2025</span> — Cashflow business gen PoC <span class="roadmap-check">✅</span>
@@ -293,8 +339,54 @@
       </div>
     </div>
 
+    <div class="submit" id="continue-to-impact">Continue to Impact</div>
+
     <div class="contact-footer">
-      Email: <a href="mailto:invest@unprincipled.inc" class="dash-link">invest@unprincipled.inc</a><br>
+      Email: <a href="mailto:assistance@unprincipled.inc" class="dash-link">assistance@unprincipled.inc</a><br>
+      X: <a href="https://x.com/UnprincipledInc" target="_blank" class="dash-link">@UnprincipledInc</a><br>
+      <br>
+      <span style="font-size:0.9rem; opacity:0.6;">Last updated: January 22, 2026</span>
+    </div>
+  </div>
+
+  <!-- Impact Page Screen -->
+  <div class="screen" id="screen4">
+    <h1>Our Impact</h1>
+    <p style="font-size:1.1rem; opacity:0.7; max-width:600px; margin:0 auto 40px; line-height:1.6;">
+      See the difference we're making in the world.
+    </p>
+
+    <div class="impact-section">
+      <div class="impact-grid">
+        <div class="impact-card">
+          <span class="impact-number">1</span>
+          <span class="impact-desc">Homeless Vets Housed</span>
+        </div>
+        <div class="impact-card">
+          <span class="impact-number">1</span>
+          <span class="impact-desc">Puppies Rescued</span>
+        </div>
+        <div class="impact-card">
+          <span class="impact-number">2</span>
+          <span class="impact-desc">Humans Paid</span>
+        </div>
+        <div class="impact-card">
+          <span class="impact-number">2</span>
+          <span class="impact-desc">Animals Paid</span>
+        </div>
+        <div class="impact-card">
+          <span class="impact-number">$1,923</span>
+          <span class="impact-desc">Payout per Hour of Video</span>
+        </div>
+        <div class="impact-card">
+          <span class="impact-number">4</span>
+          <span class="impact-desc">Gigs Facilitated</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="contact-footer">
+      Email: <a href="mailto:assistance@unprincipled.inc" class="dash-link">assistance@unprincipled.inc</a><br>
       X: <a href="https://x.com/UnprincipledInc" target="_blank" class="dash-link">@UnprincipledInc</a><br>
       <br>
       <span style="font-size:0.9rem; opacity:0.6;">Last updated: January 22, 2026</span>
@@ -361,7 +453,8 @@
     const screens = {
       s1: document.getElementById("screen1"),
       s2: document.getElementById("screen2"),
-      s3: document.getElementById("screen3")
+      s3: document.getElementById("screen3"),
+      s4: document.getElementById("screen4")
     };
 
     document.getElementById("yes").onclick = () => {
@@ -388,7 +481,7 @@
       };
     });
 
-    // Submit → investor screen
+    // Submit → roadmap screen
     document.getElementById("submit").onclick = () => {
       const interests = document.getElementById("interests").value.trim();
 
@@ -398,6 +491,13 @@
       screens.s2.classList.remove("active");
       setTimeout(() => screens.s3.classList.add("active"), 900);
     };
+
+    // Continue to impact from roadmap
+    document.getElementById("continue-to-impact").onclick = () => {
+      screens.s3.classList.remove("active");
+      setTimeout(() => screens.s4.classList.add("active"), 900);
+    };
   </script>
 </body>
 </html>
+```​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​
