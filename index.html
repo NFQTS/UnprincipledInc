@@ -234,6 +234,77 @@
       line-height: 1.4;
     }
 
+    /* Featured Opportunities Slider */
+    .featured-section {
+      width: 100%;
+      max-width: 800px;
+      margin: 40px auto;
+      padding: 0 20px;
+      box-sizing: border-box;
+    }
+
+    .featured-slider {
+      position: relative;
+      overflow: hidden;
+      margin-top: 20px;
+    }
+
+    .slider-track {
+      display: flex;
+      transition: transform 0.5s ease;
+    }
+
+    .job-card {
+      flex: 0 0 clamp(200px, 30vw, 300px);
+      border: 1px solid rgba(255,255,255,0.2);
+      padding: clamp(20px, 4vw, 30px);
+      margin-right: 20px;
+      text-align: center;
+      backdrop-filter: blur(4px);
+      transition: all 0.4s ease;
+      cursor: pointer;
+    }
+
+    .job-card:hover {
+      transform: translateY(-6px) scale(1.03);
+      box-shadow: 0 0 40px rgba(255,255,255,0.12);
+    }
+
+    .job-title {
+      font-size: clamp(1.1rem, 3vw, 1.35rem);
+      margin-bottom: 8px;
+    }
+
+    .job-desc {
+      font-size: clamp(0.8rem, 2vw, 0.9rem);
+      opacity: 0.65;
+    }
+
+    .slider-btn {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      background: transparent;
+      border: none;
+      color: white;
+      font-size: 2rem;
+      cursor: pointer;
+      opacity: 0.7;
+      transition: opacity 0.3s;
+    }
+
+    .slider-btn:hover {
+      opacity: 1;
+    }
+
+    .prev-btn {
+      left: 10px;
+    }
+
+    .next-btn {
+      right: 10px;
+    }
+
     /* Rick modal (unchanged) */
     #rick-modal {
       position: fixed;
@@ -277,10 +348,45 @@
     .close-btn:hover { opacity: 1; }
 
     iframe { width: 100%; height: 100%; border: none; }
+
+    /* PBBG Reward HUD */
+    #reward-hud {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      background: rgba(0,0,0,0.6);
+      padding: 8px 16px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      z-index: 2;
+      font-size: 0.9rem;
+      opacity: 0.8;
+      transition: opacity 0.3s;
+    }
+
+    #reward-hud:hover {
+      opacity: 1;
+    }
+
+    #resources {
+      font-weight: bold;
+    }
+
+    #timer {
+      font-weight: bold;
+    }
   </style>
 </head>
 <body>
   <canvas id="stars"></canvas>
+
+  <!-- PBBG Reward HUD -->
+  <div id="reward-hud">
+    <span>Impact: <span id="resources">0</span></span>
+    <span>Next Reward In: <span id="timer">1:00</span></span>
+  </div>
 
   <!-- Screen 1 -->
   <div class="screen active" id="screen1">
@@ -288,6 +394,29 @@
     <div class="choices">
       <div class="choice" id="yes">Yes</div>
       <div class="choice" id="no">No</div>
+    </div>
+
+    <!-- Featured Opportunities -->
+    <div class="featured-section">
+      <h2>Featured Opportunities</h2>
+      <div class="featured-slider">
+        <div class="slider-track">
+          <div class="job-card">
+            <div class="job-title">Auto Sales</div>
+            <div class="job-desc">List, negotiate, and sell cars/trucks.</div>
+          </div>
+          <div class="job-card">
+            <div class="job-title">Youtuber</div>
+            <div class="job-desc">Create engaging content for brands.</div>
+          </div>
+          <div class="job-card">
+            <div class="job-title">Landscaper/Gardener</div>
+            <div class="job-desc">Make fertilizer and keep properties/plants happy and healthy.</div>
+          </div>
+        </div>
+        <button class="slider-btn prev-btn">←</button>
+        <button class="slider-btn next-btn">→</button>
+      </div>
     </div>
   </div>
 
@@ -312,6 +441,29 @@
     <textarea id="interests" placeholder="List your hobbies, interests, passions..."></textarea>
 
     <div class="submit" id="submit">Continue</div>
+
+    <!-- Featured Opportunities -->
+    <div class="featured-section">
+      <h2>Featured Opportunities</h2>
+      <div class="featured-slider">
+        <div class="slider-track">
+          <div class="job-card">
+            <div class="job-title">Auto Sales</div>
+            <div class="job-desc">List, negotiate, and sell cars/trucks.</div>
+          </div>
+          <div class="job-card">
+            <div class="job-title">Youtuber</div>
+            <div class="job-desc">Create engaging content for brands.</div>
+          </div>
+          <div class="job-card">
+            <div class="job-title">Landscaper/Gardener</div>
+            <div class="job-desc">Make fertilizer and keep properties/plants happy and healthy.</div>
+          </div>
+        </div>
+        <button class="slider-btn prev-btn">←</button>
+        <button class="slider-btn next-btn">→</button>
+      </div>
+    </div>
   </div>
 
   <!-- Investor Dashboard Screen (Roadmap) -->
@@ -340,6 +492,29 @@
     </div>
 
     <div class="submit" id="continue-to-impact">Continue to Impact</div>
+
+    <!-- Featured Opportunities -->
+    <div class="featured-section">
+      <h2>Featured Opportunities</h2>
+      <div class="featured-slider">
+        <div class="slider-track">
+          <div class="job-card">
+            <div class="job-title">Auto Sales</div>
+            <div class="job-desc">List, negotiate, and sell cars/trucks.</div>
+          </div>
+          <div class="job-card">
+            <div class="job-title">Youtuber</div>
+            <div class="job-desc">Create engaging content for brands.</div>
+          </div>
+          <div class="job-card">
+            <div class="job-title">Landscaper/Gardener</div>
+            <div class="job-desc">Make fertilizer and keep properties/plants happy and healthy.</div>
+          </div>
+        </div>
+        <button class="slider-btn prev-btn">←</button>
+        <button class="slider-btn next-btn">→</button>
+      </div>
+    </div>
 
     <div class="contact-footer">
       Email: <a href="mailto:assistance@unprincipled.inc" class="dash-link">assistance@unprincipled.inc</a><br>
@@ -382,6 +557,29 @@
           <span class="impact-number">4</span>
           <span class="impact-desc">Gigs Facilitated</span>
         </div>
+      </div>
+    </div>
+
+    <!-- Featured Opportunities -->
+    <div class="featured-section">
+      <h2>Featured Opportunities</h2>
+      <div class="featured-slider">
+        <div class="slider-track">
+          <div class="job-card">
+            <div class="job-title">Auto Sales</div>
+            <div class="job-desc">List, negotiate, and sell cars/trucks.</div>
+          </div>
+          <div class="job-card">
+            <div class="job-title">Youtuber</div>
+            <div class="job-desc">Create engaging content for brands.</div>
+          </div>
+          <div class="job-card">
+            <div class="job-title">Landscaper/Gardener</div>
+            <div class="job-desc">Make fertilizer and keep properties/plants happy and healthy.</div>
+          </div>
+        </div>
+        <button class="slider-btn prev-btn">←</button>
+        <button class="slider-btn next-btn">→</button>
       </div>
     </div>
 
@@ -497,7 +695,52 @@
       screens.s3.classList.remove("active");
       setTimeout(() => screens.s4.classList.add("active"), 900);
     };
+
+    // Slider logic for all sliders
+    document.querySelectorAll('.featured-slider').forEach(slider => {
+      const track = slider.querySelector('.slider-track');
+      const prevBtn = slider.querySelector('.prev-btn');
+      const nextBtn = slider.querySelector('.next-btn');
+      const cardWidth = slider.querySelector('.job-card').offsetWidth + 20; // width + margin
+      let position = 0;
+
+      nextBtn.onclick = () => {
+        position -= cardWidth;
+        const maxPosition = - (track.children.length - 1) * cardWidth;
+        if (position < maxPosition) position = maxPosition;
+        track.style.transform = `translateX(${position}px)`;
+      };
+
+      prevBtn.onclick = () => {
+        position += cardWidth;
+        if (position > 0) position = 0;
+        track.style.transform = `translateX(${position}px)`;
+      };
+    });
+
+    // PBBG Reward System (Subtle Timer and Resource Counter)
+    let resources = 0;
+    let timeLeft = 60; // 10 minutes in seconds
+
+    const resourcesElem = document.getElementById('resources');
+    const timerElem = document.getElementById('timer');
+
+    function updateTimer() {
+      const minutes = Math.floor(timeLeft / 60);
+      const seconds = timeLeft % 60;
+      timerElem.textContent = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+
+      if (timeLeft > 0) {
+        timeLeft--;
+      } else {
+        resources += 1; // Reward 1 resource
+        resourcesElem.textContent = resources;
+        timeLeft = 60; // Reset timer
+      }
+    }
+
+    setInterval(updateTimer, 1000);
+    updateTimer(); // Initial update
   </script>
 </body>
 </html>
-```​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​
