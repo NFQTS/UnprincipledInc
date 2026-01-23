@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Hiring Portal</title>
+  <title>Hiring Portal — Alpha</title>
   <style>
     html, body {
       margin: 0;
@@ -36,6 +36,7 @@
       transition: opacity 1s ease, transform 1s ease;
       z-index: 1;
       pointer-events: none;
+      overflow-y: auto;
     }
 
     .screen.active {
@@ -48,155 +49,146 @@
       font-weight: 300;
       letter-spacing: 1.2px;
       font-size: clamp(1.8rem, 5vw, 2.4rem);
-      margin-bottom: 60px;
+      margin-bottom: 20px;
     }
 
-    .choices {
+    h2 {
+      font-weight: 300;
+      font-size: clamp(1.4rem, 4vw, 1.8rem);
+      letter-spacing: 1px;
+      margin: 40px 0 30px;
+      opacity: 0.9;
+    }
+
+    .choices, .roles {
       display: flex;
-      gap: clamp(60px, 12vw, 100px);
+      gap: clamp(40px, 8vw, 80px);
       flex-wrap: wrap;
       justify-content: center;
+      margin-bottom: 40px;
     }
 
-    .choice {
+    .choice, .role-card {
       font-size: clamp(1.3rem, 4vw, 1.5rem);
       font-weight: 200;
       letter-spacing: 2px;
       cursor: pointer;
       position: relative;
-      transition: transform 0.4s ease, opacity 0.4s ease;
+      transition: all 0.4s ease;
     }
 
-    .choice::after {
-      content: "";
-      position: absolute;
-      left: 0;
-      bottom: -8px;
-      width: 100%;
-      height: 1px;
-      background: white;
-      transform: scaleX(0);
-      transform-origin: center;
-      transition: transform 0.4s ease;
-    }
-
-    .choice:hover {
-      transform: translateY(-4px) scale(1.02);
-      opacity: 0.9;
-    }
-
-    .choice:hover::after {
-      transform: scaleX(1);
-    }
-
-    /* Role Screen */
-    .roles {
-      display: flex;
-      gap: clamp(40px, 8vw, 60px);
-      margin-bottom: 50px;
-      flex-wrap: wrap;
-      justify-content: center;
+    .choice:hover, .role-card:hover {
+      transform: translateY(-6px) scale(1.03);
+      opacity: 0.92;
     }
 
     .role-card {
       border: 1px solid rgba(255,255,255,0.2);
-      padding: clamp(25px, 5vw, 40px) clamp(20px, 4vw, 30px);
-      width: clamp(180px, 40vw, 220px);
-      cursor: pointer;
-      position: relative;
-      transition: transform 0.5s ease, border 0.5s ease, box-shadow 0.5s ease;
+      padding: clamp(24px, 5vw, 36px) clamp(20px, 4vw, 28px);
+      width: clamp(180px, 38vw, 240px);
       backdrop-filter: blur(4px);
-    }
-
-    .role-card::before {
-      content: "";
-      position: absolute;
-      inset: 0;
-      background: linear-gradient(120deg, transparent, rgba(255,255,255,0.1), transparent);
-      opacity: 0;
-      transition: opacity 0.5s ease;
-    }
-
-    .role-card:hover {
-      transform: translateY(-10px) scale(1.03);
-      border-color: rgba(255,255,255,0.6);
-      box-shadow: 0 0 30px rgba(255,255,255,0.08);
-    }
-
-    .role-card:hover::before {
-      opacity: 1;
     }
 
     .role-card.selected {
       border-color: white;
-      box-shadow: 0 0 40px rgba(255,255,255,0.15);
+      box-shadow: 0 0 40px rgba(255,255,255,0.12);
     }
 
-    .role-title {
-      font-size: clamp(1.1rem, 3vw, 1.3rem);
-      font-weight: 300;
-      letter-spacing: 1.4px;
-      margin-bottom: 10px;
-    }
-
-    .role-sub {
-      font-size: clamp(0.75rem, 2vw, 0.85rem);
-      opacity: 0.6;
-      letter-spacing: 1px;
-    }
+    .role-title { font-size: clamp(1.1rem, 3vw, 1.35rem); margin-bottom: 8px; }
+    .role-sub   { font-size: clamp(0.8rem, 2vw, 0.9rem);  opacity: 0.65; }
 
     textarea {
-      width: clamp(320px, 80vw, 480px);
-      max-width: 90vw;
-      height: 120px;
+      width: clamp(320px, 80vw, 500px);
+      height: 110px;
       background: transparent;
       border: 1px solid rgba(255,255,255,0.3);
       color: white;
       font-size: 1rem;
       padding: 14px;
-      letter-spacing: 0.6px;
-      outline: none;
+      margin: 20px 0 30px;
       resize: none;
-      transition: border 0.4s ease, box-shadow 0.4s ease;
+      outline: none;
+      transition: border 0.4s, box-shadow 0.4s;
     }
 
     textarea:focus {
       border-color: white;
-      box-shadow: 0 0 20px rgba(255,255,255,0.1);
+      box-shadow: 0 0 20px rgba(255,255,255,0.08);
     }
 
     .submit {
-      margin-top: 40px;
-      font-size: 1.1rem;
-      letter-spacing: 2px;
+      font-size: 1.2rem;
+      letter-spacing: 2.2px;
+      margin-top: 30px;
       cursor: pointer;
-      position: relative;
-      transition: transform 0.4s ease, opacity 0.4s ease;
     }
 
-    .submit::after {
-      content: "";
-      position: absolute;
-      left: 0;
-      bottom: -8px;
+    /* Centered Roadmap */
+    .roadmap-section {
       width: 100%;
-      height: 1px;
-      background: white;
-      transform: scaleX(0);
-      transform-origin: center;
-      transition: transform 0.4s ease;
+      max-width: 720px;
+      margin: 0 auto;
+      padding: 0 20px;
+      box-sizing: border-box;
     }
 
-    .submit:hover {
-      transform: translateY(-4px) scale(1.02);
-      opacity: 0.9;
+    .roadmap {
+      text-align: left;
+      display: inline-block;
+      width: 100%;
     }
 
-    .submit:hover::after {
-      transform: scaleX(1);
+    .roadmap-item {
+      position: relative;
+      padding-left: 48px;
+      margin: 32px 0;
+      font-size: clamp(1.05rem, 2.8vw, 1.15rem);
+      line-height: 1.5;
     }
 
-    /* Modal for "No" – improved responsive video */
+    .roadmap-item::before {
+      content: "→";
+      position: absolute;
+      left: 12px;
+      top: 2px;
+      color: rgba(255,255,255,0.7);
+      font-weight: bold;
+      font-size: 1.3rem;
+    }
+
+    .roadmap-year {
+      font-weight: 400;
+      color: white;
+      opacity: 1;
+      display: inline-block;
+      min-width: 80px;
+    }
+
+    .roadmap-check {
+      color: #55ff99;
+      margin-left: 8px;
+      font-weight: bold;
+    }
+
+    .contact-footer {
+      margin-top: 80px;
+      font-size: 1rem;
+      opacity: 0.7;
+      line-height: 1.7;
+    }
+
+    .dash-link {
+      color: #a0d0ff;
+      text-decoration: none;
+      border-bottom: 1px solid transparent;
+      transition: border-bottom 0.3s;
+    }
+
+    .dash-link:hover {
+      border-bottom: 1px solid #a0d0ff;
+    }
+
+    /* Rick modal (unchanged) */
     #rick-modal {
       position: fixed;
       inset: 0;
@@ -207,63 +199,38 @@
       z-index: 100;
       cursor: pointer;
       padding: 2vh 2vw;
-      box-sizing: border-box;
     }
 
-    #rick-modal.active {
-      display: flex;
-    }
+    #rick-modal.active { display: flex; }
 
     .rick-container {
       position: relative;
       width: 90vw;
-      max-width: 90vh;               /* prevents too wide in portrait */
-      max-height: 80vh;              /* key: caps height so it fits portrait */
+      max-width: 90vh;
+      max-height: 80vh;
       aspect-ratio: 16 / 9;
       margin: auto;
       box-shadow: 0 0 60px rgba(255,255,255,0.15);
     }
 
-    /* Fallback for older browsers without aspect-ratio support */
     @supports not (aspect-ratio: 16 / 9) {
-      .rick-container {
-        padding-top: 56.25%;         /* 9/16 * 100% */
-      }
-      .rick-container iframe {
-        position: absolute;
-        inset: 0;
-      }
+      .rick-container { padding-top: 56.25%; }
+      .rick-container iframe { position: absolute; inset: 0; }
     }
 
     .close-btn {
       position: absolute;
-      top: -3rem;
+      top: -2.8rem;
       right: 0;
-      font-size: clamp(1.4rem, 4vw, 1.8rem);
+      font-size: clamp(1.5rem, 4vw, 2rem);
       cursor: pointer;
-      opacity: 0.7;
+      opacity: 0.8;
       transition: opacity 0.3s;
-      z-index: 101;
     }
 
-    .close-btn:hover {
-      opacity: 1;
-    }
+    .close-btn:hover { opacity: 1; }
 
-    iframe {
-      width: 100%;
-      height: 100%;
-      border: none;
-      display: block;
-    }
-
-    /* Extra safety for very tall/narrow viewports */
-    @media (max-aspect-ratio: 3/4) {   /* portrait-ish */
-      .rick-container {
-        width: 95vw;
-        max-height: 70vh;
-      }
-    }
+    iframe { width: 100%; height: 100%; border: none; }
   </style>
 </head>
 <body>
@@ -301,6 +268,39 @@
     <div class="submit" id="submit">Continue</div>
   </div>
 
+  <!-- Investor Dashboard Screen -->
+  <div class="screen" id="screen3">
+    <h1>This is an alpha test.</h1>
+    <p style="font-size:1.1rem; opacity:0.7; max-width:600px; margin:0 auto 40px; line-height:1.6;">
+      We're moving fast and breaking things. Updates happen frequently.
+    </p>
+
+    <div class="roadmap-section">
+      <h2>Roadmap</h2>
+      <div class="roadmap">
+        <div class="roadmap-item">
+          <span class="roadmap-year">2023</span> — AI Supply Chain Tracking PoC <span class="roadmap-check">✅</span>
+        </div>
+        <div class="roadmap-item">
+          <span class="roadmap-year">2024</span> — Reliable AI Concept-brand tech <span class="roadmap-check">✅</span>
+        </div>
+        <div class="roadmap-item">
+          <span class="roadmap-year">2025</span> — Cashflow business gen PoC <span class="roadmap-check">✅</span>
+        </div>
+        <div class="roadmap-item">
+          <span class="roadmap-year">2026</span> — On-demand hiring/training public launch
+        </div>
+      </div>
+    </div>
+
+    <div class="contact-footer">
+      Email: <a href="mailto:invest@unprincipled.inc" class="dash-link">invest@unprincipled.inc</a><br>
+      X: <a href="https://x.com/UnprincipledInc" target="_blank" class="dash-link">@UnprincipledInc</a><br>
+      <br>
+      <span style="font-size:0.9rem; opacity:0.6;">Last updated: January 22, 2026</span>
+    </div>
+  </div>
+
   <!-- Rick Modal -->
   <div id="rick-modal">
     <div class="rick-container">
@@ -314,23 +314,21 @@
   </div>
 
   <script>
-    // STARFIELD (unchanged)
+    // STARFIELD
     const canvas = document.getElementById("stars");
     const ctx = canvas.getContext("2d");
-    let width, height;
-    let stars = [];
+    let width, height, stars = [];
 
     function resize() {
       width = canvas.width = window.innerWidth;
       height = canvas.height = window.innerHeight;
     }
-
     window.addEventListener("resize", resize);
     resize();
 
-    function createStars(count) {
+    function createStars() {
       stars = [];
-      for (let i = 0; i < count; i++) {
+      for (let i = 0; i < 160; i++) {
         stars.push({
           x: Math.random() * width,
           y: Math.random() * height,
@@ -340,12 +338,11 @@
         });
       }
     }
-
-    createStars(160);
+    createStars();
 
     function animateStars() {
       ctx.clearRect(0, 0, width, height);
-      for (let star of stars) {
+      stars.forEach(star => {
         star.y += star.speed;
         if (star.y > height) {
           star.y = -10;
@@ -355,74 +352,52 @@
         ctx.arc(star.x, star.y, star.radius, 0, Math.PI * 2);
         ctx.fillStyle = `rgba(255,255,255,${star.alpha})`;
         ctx.fill();
-      }
+      });
       requestAnimationFrame(animateStars);
     }
-
     animateStars();
 
-    // SCREEN NAVIGATION
-    const screen1 = document.getElementById("screen1");
-    const screen2 = document.getElementById("screen2");
+    // Screen logic
+    const screens = {
+      s1: document.getElementById("screen1"),
+      s2: document.getElementById("screen2"),
+      s3: document.getElementById("screen3")
+    };
 
-    document.getElementById("yes").addEventListener("click", () => {
-      screen1.classList.remove("active");
-      setTimeout(() => {
-        screen2.classList.add("active");
-      }, 900);
-    });
+    document.getElementById("yes").onclick = () => {
+      screens.s1.classList.remove("active");
+      setTimeout(() => screens.s2.classList.add("active"), 900);
+    };
 
-    // RICK MODAL
+    // Rick roll
     const rickModal = document.getElementById("rick-modal");
-    const closeBtn = rickModal.querySelector(".close-btn");
-
-    function showRick() {
-      rickModal.classList.add("active");
-    }
-
-    function hideRick() {
-      rickModal.classList.remove("active");
-    }
-
-    document.getElementById("no").addEventListener("click", showRick);
-
-    rickModal.addEventListener("click", hideRick);
-    closeBtn.addEventListener("click", (e) => {
+    document.getElementById("no").onclick = () => rickModal.classList.add("active");
+    rickModal.onclick = () => rickModal.classList.remove("active");
+    rickModal.querySelector(".close-btn").onclick = e => {
       e.stopPropagation();
-      hideRick();
-    });
+      rickModal.classList.remove("active");
+    };
 
-    // ROLE SELECTION & SUBMIT (unchanged)
-    const roleCards = document.querySelectorAll(".role-card");
+    // Role selection
     let selectedRole = null;
-
-    roleCards.forEach(card => {
-      card.addEventListener("click", () => {
-        roleCards.forEach(c => c.classList.remove("selected"));
+    document.querySelectorAll(".role-card").forEach(card => {
+      card.onclick = () => {
+        document.querySelectorAll(".role-card").forEach(c => c.classList.remove("selected"));
         card.classList.add("selected");
         selectedRole = card.dataset.role;
-      });
+      };
     });
 
-    document.getElementById("submit").addEventListener("click", () => {
+    // Submit → investor screen
+    document.getElementById("submit").onclick = () => {
       const interests = document.getElementById("interests").value.trim();
 
-      if (!selectedRole) {
-        alert("Please select a role.");
-        return;
-      }
-      if (!interests) {
-        alert("Please tell us about your interests/passions.");
-        return;
-      }
+      if (!selectedRole) return alert("Please select a role.");
+      if (!interests) return alert("Please tell us about your interests/passions.");
 
-      screen2.innerHTML = `
-        <h1>You're in.</h1>
-        <div style="font-size:1.1rem; opacity:0.7; letter-spacing:1px; margin-top:20px;">
-          We’ll be in touch shortly.
-        </div>
-      `;
-    });
+      screens.s2.classList.remove("active");
+      setTimeout(() => screens.s3.classList.add("active"), 900);
+    };
   </script>
 </body>
 </html>
