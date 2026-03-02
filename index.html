@@ -1,553 +1,284 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Brand Launchpad: Unprincipled Inc.</title>
-  <style>
-    :root {
-      --neon: #00ffea;
-      --neon-glow: 0 0 20px rgba(0, 255, 234, 0.6);
-      --glass-bg: rgba(20, 20, 40, 0.35);
-      --blur: blur(16px);
-    }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    html, body {
-      margin: 0;
-      padding: 0;
-      background: #000;
-      color: #fff;
-      font-family: 'Inter', -apple-system, BlinkMacOS, 'Segoe UI', Roboto, sans-serif;
-      height: 100%;
-      overflow-x: hidden;
-    }
+<title>Gerald — Systems & Experiments</title>
 
-    canvas {
-      position: fixed;
-      top: 0; left: 0;
-      z-index: -2;
-      pointer-events: none;
-    }
+<style>
 
-    .container {
-      position: relative;
-      z-index: 1;
-      min-height: 100vh;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      text-align: center;
-      padding: 5vh 5vw;
-    }
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500&display=swap');
 
-    h1 {
-      font-weight: 300;
-      letter-spacing: 0.15em;
-      font-size: clamp(2.5rem, 8vw, 5rem);
-      margin: 0 0 1.5rem;
-      background: linear-gradient(90deg, #fff, var(--neon), #fff);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      animation: glow 6s ease-in-out infinite alternate;
-    }
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+}
 
-    @keyframes glow {
-      from { text-shadow: 0 0 10px rgba(255,255,255,0.5); }
-      to   { text-shadow: var(--neon-glow); }
-    }
+body{
+background:#000;
+color:#fff;
+font-family:Inter, sans-serif;
+overflow:hidden;
+}
 
-    .choices {
-      display: flex;
-      gap: clamp(3rem, 10vw, 8rem);
-      margin: 2.5rem 0 4rem;
-    }
+/* STARFIELD */
 
-    .choice {
-      font-size: clamp(2rem, 6vw, 3.2rem);
-      font-weight: 200;
-      letter-spacing: 0.2em;
-      cursor: pointer;
-      padding: 1rem 2.5rem;
-      border-radius: 1.5rem;
-      background: var(--glass-bg);
-      backdrop-filter: var(--blur);
-      border: 1px solid rgba(255,255,255,0.12);
-      transition: all 0.5s cubic-bezier(0.23,1,0.32,1);
-    }
+canvas{
+position:fixed;
+top:0;
+left:0;
+z-index:-1;
+}
 
-    .choice:hover {
-      transform: translateY(-10px) scale(1.06);
-      box-shadow: var(--neon-glow), 0 15px 50px rgba(0,0,0,0.5);
-      border-color: var(--neon);
-    }
+/* CENTER */
 
-    .hire-section {
-      max-width: 800px;
-      margin: 3rem auto 0;
-      font-size: 1.3rem;
-      line-height: 1.7;
-      opacity: 0;
-      transform: translateY(40px);
-      transition: all 1s ease;
-      background: var(--glass-bg);
-      backdrop-filter: var(--blur);
-      padding: 2.5rem;
-      border-radius: 2rem;
-      border: 1px solid rgba(0,255,234,0.15);
-    }
+.wrapper{
+height:100vh;
+display:flex;
+align-items:center;
+justify-content:center;
+text-align:center;
+padding:30px;
+}
 
-    .hire-section.active {
-      opacity: 1;
-      transform: translateY(0);
-    }
+.container{
+max-width:720px;
+}
 
-    .hire-btn {
-      margin-top: 2rem;
-      padding: 1.1rem 3rem;
-      font-size: 1.3rem;
-      letter-spacing: 0.15em;
-      color: white;
-      background: linear-gradient(135deg, #111, #1a1a3a);
-      border: 1px solid var(--neon);
-      border-radius: 3rem;
-      text-decoration: none;
-      box-shadow: var(--neon-glow);
-      transition: all 0.4s ease;
-      display: inline-block;
-    }
+/* TYPOGRAPHY */
 
-    .hire-btn:hover {
-      background: linear-gradient(135deg, var(--neon), #00b8a9);
-      color: #000;
-      transform: scale(1.04);
-      box-shadow: 0 0 40px rgba(0,255,234,0.7);
-    }
+h1{
+font-weight:300;
+font-size:48px;
+letter-spacing:-1px;
+margin-bottom:14px;
+}
 
-    .donate-cta {
-      margin-top: 2rem;
-      font-size: 1.15rem;
-      opacity: 0.85;
-    }
+.subtitle{
+opacity:.6;
+margin-bottom:55px;
+}
 
-    .donate-btn {
-      display: inline-block;
-      margin-top: 0.8rem;
-      padding: 0.9rem 2.5rem;
-      font-size: 1.15rem;
-      color: var(--neon);
-      background: rgba(0,255,234,0.08);
-      border: 1px solid var(--neon);
-      border-radius: 3rem;
-      text-decoration: none;
-      transition: all 0.4s ease;
-    }
+/* PROJECTS */
 
-    .donate-btn:hover {
-      background: var(--neon);
-      color: #000;
-      box-shadow: var(--neon-glow);
-      transform: scale(1.04);
-    }
+.project{
+padding:16px 0;
+border-bottom:1px solid rgba(255,255,255,.1);
+transition:.3s;
+}
 
-    #brands-counter {
-      margin: 1.5rem 0 3rem;
-      background: var(--glass-bg);
-      backdrop-filter: var(--blur);
-      padding: 1rem 2.5rem;
-      border-radius: 3rem;
-      border: 1px solid rgba(255,255,255,0.1);
-      font-size: clamp(1.5rem, 4vw, 2rem);
-      font-weight: 300;
-      box-shadow: 0 8px 30px rgba(0,0,0,0.6);
-    }
+.project:hover{
+transform:translateX(6px);
+opacity:.8;
+}
 
-    #brands-counter strong {
-      color: var(--neon);
-      font-weight: 400;
-      text-shadow: 0 0 12px var(--neon);
-    }
+.project span{
+font-size:14px;
+opacity:.5;
+}
 
-    .featured-section {
-      width: 100%;
-      max-width: 1400px;
-      margin: 5rem auto 0;
-    }
+/* BUTTON */
 
-    .featured-section h2 {
-      font-size: clamp(2rem, 5vw, 3rem);
-      font-weight: 300;
-      margin-bottom: 2rem;
-    }
+.button{
+display:inline-block;
+margin-top:35px;
+padding:12px 22px;
+border:1px solid white;
+border-radius:40px;
+cursor:pointer;
+transition:.3s;
+user-select:none;
+}
 
-    .featured-slider {
-      position: relative;
-      overflow: hidden;
-    }
+.button:hover{
+background:white;
+color:black;
+}
 
-    .slider-track {
-      display: flex;
-      flex-wrap: nowrap;
-      gap: 2rem;
-      transition: transform 0.8s cubic-bezier(0.23,1,0.32,1);
-    }
+.disabled{
+opacity:.4;
+cursor:default;
+}
 
-    .launch-card {
-      flex: 0 0 clamp(340px, 45vw, 420px);
-      background: var(--glass-bg);
-      backdrop-filter: var(--blur);
-      border: 1px solid rgba(0,255,234,0.12);
-      border-radius: 1.8rem;
-      padding: 1.8rem;
-      text-align: center;
-      transition: all 0.5s ease;
-      box-shadow: 0 12px 40px rgba(0,0,0,0.5);
-    }
+/* SYSTEM TEXT */
 
-    .launch-card:hover {
-      transform: translateY(-15px);
-      border-color: var(--neon);
-      box-shadow: var(--neon-glow), 0 25px 70px rgba(0,0,0,0.6);
-    }
+.system{
+margin-top:20px;
+opacity:0;
+transition:.8s;
+font-size:14px;
+color:#aaa;
+}
 
-    .video-wrapper {
-      position: relative;
-      width: 100%;
-      aspect-ratio: 16 / 9;
-      border-radius: 1.2rem;
-      overflow: hidden;
-      margin-bottom: 1.2rem;
-      box-shadow: inset 0 0 25px rgba(0,0,0,0.7);
-    }
+.show{
+opacity:1;
+}
 
-    .video-wrapper iframe {
-      position: absolute;
-      inset: 0;
-      width: 100%;
-      height: 100%;
-      border: none;
-    }
+/* FOOTER */
 
-    .launch-title {
-      font-size: clamp(1.7rem, 4vw, 2.3rem);
-      font-weight: 300;
-      margin: 0.6rem 0 0.4rem;
-    }
+footer{
+margin-top:70px;
+opacity:.45;
+font-size:13px;
+}
 
-    .launch-desc {
-      font-size: 1.1rem;
-      opacity: 0.85;
-      margin-bottom: 1.2rem;
-    }
-
-    .cta-btn {
-      padding: 0.8rem 2.2rem;
-      font-size: 1rem;
-      color: white;
-      background: rgba(0,255,234,0.1);
-      border: 1px solid var(--neon);
-      border-radius: 3rem;
-      text-decoration: none;
-      transition: all 0.4s ease;
-    }
-
-    .cta-btn:hover {
-      background: var(--neon);
-      color: #000;
-      box-shadow: var(--neon-glow);
-    }
-
-    .slider-btn {
-      position: absolute;
-      top: 50%;
-      transform: translateY(-50%);
-      background: rgba(0,0,0,0.5);
-      backdrop-filter: blur(10px);
-      border: none;
-      color: var(--neon);
-      font-size: 3rem;
-      cursor: pointer;
-      padding: 0.8rem;
-      border-radius: 50%;
-      transition: all 0.3s;
-      display: none; /* hidden on mobile */
-    }
-
-    .slider-btn:hover { background: rgba(0,255,234,0.4); }
-
-    .prev-btn { left: 1rem; }
-    .next-btn { right: 1rem; }
-
-    /* Mobile-first adjustments */
-    @media (max-width: 900px) {
-      .slider-track {
-        flex-direction: column;
-        align-items: center;
-        gap: 3rem;
-      }
-
-      .launch-card {
-        flex: 0 0 auto;
-        width: 90vw;
-        max-width: 420px;
-      }
-
-      .video-wrapper {
-        aspect-ratio: 9 / 16; /* Better for portrait videos on phone */
-      }
-
-      .slider-btn {
-        display: none; /* No need for arrows when stacked */
-      }
-
-      .choices {
-        flex-direction: column;
-        gap: 2rem;
-      }
-
-      .choice {
-        width: 80vw;
-        max-width: 360px;
-        margin: 0 auto;
-      }
-    }
-
-    /* Rick Modal */
-    #rick-modal {
-      position: fixed;
-      inset: 0;
-      background: rgba(0,0,0,0.98);
-      display: none;
-      align-items: center;
-      justify-content: center;
-      z-index: 100;
-      cursor: pointer;
-    }
-
-    #rick-modal.active { display: flex; }
-
-    .rick-container {
-      position: relative;
-      width: 90vw;
-      max-width: 90vh;
-      aspect-ratio: 16 / 9;
-      box-shadow: 0 0 100px rgba(0,255,234,0.4);
-    }
-
-    .close-btn {
-      position: absolute;
-      top: -2.5rem;
-      right: 0;
-      font-size: 3.5rem;
-      color: white;
-      cursor: pointer;
-    }
-
-    .footer {
-      margin-top: 6rem;
-      font-size: 1rem;
-      opacity: 0.7;
-      padding-bottom: 3rem;
-    }
-
-    .dash-link { color: var(--neon); text-decoration: none; }
-    .dash-link:hover { text-shadow: var(--neon-glow); }
-  </style>
+</style>
 </head>
+
 <body>
-  <canvas id="stars"></canvas>
 
-  <div class="container">
-    <div id="brands-counter">
-      <strong>4+ Successful Brands Launched.</strong> Real Results. Real Revenue.
-    </div>
+<canvas id="stars"></canvas>
 
-    <h1>Are you ready to launch a brand?</h1>
+<div class="wrapper">
+
+<div class="container">
+
+<h1>Gerald</h1>
+
+<p class="subtitle">
+Independent builder exploring AI systems,
+creative tooling, and human-machine interaction.
+</p>
+
+<div class="project">
+AI/Blockchain assisted transparent supply chain tracking<br>
+<span>Public ledgers to track contribution and payouts</span>
+</div>
+
+<div class="project">
+Pre Grok AI private messaging assistant<br>
+<span>Meant to provide my art collectors with futuristic tools</span>
+</div>
+
+<div class="project">
+AI Assisted "Auto CEO"<br>
+<span>Agent for autonomously managing brands in any language/industry</span>
+</div>
+
+<div class="project">
+Quantum Capture tech<br>
+<span>Proprietary clean energy systems</span>
+</div>
+
+<div id="inviteBtn" class="button">
+ask Claude to schedule an interview?
+</div>
+
+<div id="denied" class="system">
+access denied → humans still make that decision.<br>
+have a human email me at: guitarfiend2002@gmail.com
+</div>
+
+<div id="observer" class="system">
+observer.note → sustained attention detected.<br>
+thank you for being curious.
+but uh... r u ok? lol.
+</div>
+
+<footer>
+built with ai assistance · 2026
+</footer>
+
+</div>
+</div>
+
+<script>
+
+/* MODEL NAME — change per company */
+
+const MODEL_NAME = "Claude";
+
+document.getElementById("inviteBtn")
+.innerText = `ask ${MODEL_NAME} to schedule an interview?`;
 
 
-    <div class="choices">
-      <div class="choice" id="yes">Yes</div>
-      <div class="choice" id="no">No</div>
-    </div>
-    
-    <h1>OR</h1>
-    <h1>Are you looking for on-demand gigs?</h1>
-    <h1>(Still under construction... sorry... innovation is demanding like that...)</h1>
-    <div id="hire-section" class="hire-section">
-      <p>Excellent. We love designing winning brands...</p>
-      <p>Our live portfolio proves execution across verticals. Share your idea... we'll help you materialize it into a scalable, monetized entity.</p>
-      <p class="price-info"><strong>Premium Service Starting at $75,000</strong> we can help make your vision a reality, from concept to market dominance.</p>
-      <a href="mailto:assistance@unprincipled.inc?subject=Brand%20Launch%20Inquiry" class="hire-btn">Initiate Launch → assistance@unprincipled.inc</a>
-      <div class="donate-cta">
-        <p>Would you rather help support emerging creators?</p>
-        <a href="mailto:assistance@unprincipled.inc?subject=Creator%20Support%20Donation" class="donate-btn">Donate to Our Fund →</a>
-      </div>
-    </div>
+/* BUTTON INTERACTION */
 
-    <div class="featured-section">
-      <h2>Launched Brands</h2>
-      <div class="featured-slider">
-        <div class="slider-track">
-          <div class="launch-card">
-            <div class="video-wrapper">
-              <iframe src="https://www.youtube.com/embed/VIDEO_ID_HERE?autoplay=1&mute=1&loop=1&playlist=VIDEO_ID_HERE&controls=0&rel=0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
-            </div>
-            <div class="launch-title">GTLAquatics</div>
-            <div class="launch-desc">Premium tropical aquatic pets and plants</div>
-            <a href="https://gtlaquatics.example.com?ref=unprincipled" class="cta-btn" target="_blank">Enter Ecosystem →</a>
-          </div>
+const btn = document.getElementById("inviteBtn");
+const denied = document.getElementById("denied");
 
-          <div class="launch-card">
-            <div class="video-wrapper">
-              <iframe src="https://www.youtube.com/embed/VIDEO_ID_HERE?autoplay=1&mute=1&loop=1&playlist=VIDEO_ID_HERE&controls=0&rel=0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
-            </div>
-            <div class="launch-title">Nfqts</div>
-            <div class="launch-desc">Boundary-pushing digital & physical art</div>
-            <a href="https://nfqts.example.com?ref=unprincipled" class="cta-btn" target="_blank">Explore Gallery →</a>
-          </div>
+let clicked = false;
 
-          <div class="launch-card">
-            <div class="video-wrapper">
-              <iframe src="https://www.youtube.com/embed/VIDEO_ID_HERE?autoplay=1&mute=1&loop=1&playlist=VIDEO_ID_HERE&controls=0&rel=0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
-            </div>
-            <div class="launch-title">GTLAuto</div>
-            <div class="launch-desc">Getting abandon classics back on the road</div>
-            <a href="https://gtlauto.example.com?ref=unprincipled" class="cta-btn" target="_blank">See Builds →</a>
-          </div>
+btn.addEventListener("click",()=>{
 
-          <div class="launch-card">
-            <div class="video-wrapper">
-              <iframe src="https://www.youtube.com/embed/VIDEO_ID_HERE?autoplay=1&mute=1&loop=1&playlist=VIDEO_ID_HERE&controls=0&rel=0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
-            </div>
-            <div class="launch-title">Bars2Beats</div>
-            <div class="launch-desc">A music platform for artists</div>
-            <a href="https://bars2beats.example.com?ref=unprincipled" class="cta-btn" target="_blank">Join Platform →</a>
-          </div>
-        </div>
-        <button class="slider-btn prev-btn">←</button>
-        <button class="slider-btn next-btn">→</button>
-      </div>
-    </div>
+if(clicked) return;
 
-    <div class="footer">
-      Unprincipled Inc. • <a href="mailto:assistance@unprincipled.inc" class="dash-link">assistance@unprincipled.inc</a><br>
-      X: <a href="https://x.com/UnprincipledInc" target="_blank" class="dash-link">@UnprincipledInc</a>
-    </div>
-  </div>
+clicked = true;
 
-  <!-- Rick Modal -->
-  <div id="rick-modal">
-    <div class="rick-container">
-      <div class="close-btn">×</div>
-      <iframe 
-        src="https://www.youtube.com/embed/dQw4w9WgXcQ?autoplay=1&mute=1&loop=1&playlist=dQw4w9WgXcQ&rel=0&controls=0" 
-        allow="autoplay; encrypted-media" 
-        allowfullscreen>
-      </iframe>
-    </div>
-  </div>
+btn.classList.add("disabled");
 
-  <script>
-    // Starfield (unchanged)
-    const canvas = document.getElementById("stars");
-    const ctx = canvas.getContext("2d");
-    let width, height, stars = [];
+setTimeout(()=>{
+denied.classList.add("show");
+},400);
 
-    function resize() {
-      width = canvas.width = window.innerWidth;
-      height = canvas.height = window.innerHeight;
-    }
-    window.addEventListener("resize", resize);
-    resize();
+});
 
-    function createStars() {
-      stars = [];
-      for (let i = 0; i < 220; i++) {
-        stars.push({
-          x: Math.random() * width,
-          y: Math.random() * height,
-          radius: Math.random() * 1.4 + 0.4,
-          speed: Math.random() * 0.6 + 0.12,
-          alpha: Math.random() * 0.8 + 0.2,
-          hue: Math.random() * 60 + 180
-        });
-      }
-    }
-    createStars();
 
-    function animateStars() {
-      ctx.fillStyle = 'rgba(0,0,0,0.05)';
-      ctx.fillRect(0, 0, width, height);
-      stars.forEach(star => {
-        star.y += star.speed;
-        if (star.y > height) {
-          star.y = -10;
-          star.x = Math.random() * width;
-        }
-        ctx.beginPath();
-        ctx.arc(star.x, star.y, star.radius, 0, Math.PI * 2);
-        ctx.fillStyle = `hsla(${star.hue}, 80%, 80%, ${star.alpha})`;
-        ctx.fill();
-      });
-      requestAnimationFrame(animateStars);
-    }
-    animateStars();
+/* OBSERVER MODE */
 
-    // Yes/No interactions
-    const yesBtn = document.getElementById("yes");
-    const noBtn = document.getElementById("no");
-    const hireSection = document.getElementById("hire-section");
-    const rickModal = document.getElementById("rick-modal");
+setTimeout(()=>{
 
-    yesBtn.onclick = () => {
-      hireSection.classList.add("active");
-      hireSection.scrollIntoView({ behavior: 'smooth', block: 'center' });
-    };
+document
+.getElementById("observer")
+.classList.add("show");
 
-    noBtn.onclick = () => rickModal.classList.add("active");
+},22000);
 
-    rickModal.onclick = () => rickModal.classList.remove("active");
-    rickModal.querySelector(".close-btn").onclick = e => {
-      e.stopPropagation();
-      rickModal.classList.remove("active");
-    };
 
-    // Slider logic – only enable horizontal on larger screens
-    const slider = document.querySelector('.featured-slider');
-    const track = slider.querySelector('.slider-track');
-    const prevBtn = slider.querySelector('.prev-btn');
-    const nextBtn = slider.querySelector('.next-btn');
-    let position = 0;
+/* STARFIELD */
 
-    function updateSlider() {
-      if (window.innerWidth > 900) {
-        const card = track.querySelector('.launch-card');
-        if (!card) return;
-        const cardWidth = card.offsetWidth + 32; // gap 2rem = 32px
-        const maxPosition = - (track.children.length - 1) * cardWidth + (window.innerWidth - cardWidth) / 2; // center-ish
+const canvas = document.getElementById("stars");
+const ctx = canvas.getContext("2d");
 
-        nextBtn.onclick = () => {
-          position -= cardWidth;
-          if (position < maxPosition) position = maxPosition;
-          track.style.transform = `translateX(${position}px)`;
-        };
+function resize(){
+canvas.width = window.innerWidth;
+canvas.height = window.innerHeight;
+}
 
-        prevBtn.onclick = () => {
-          position += cardWidth;
-          if (position > 0) position = 0;
-          track.style.transform = `translateX(${position}px)`;
-        };
+resize();
+window.addEventListener("resize",resize);
 
-        prevBtn.style.display = 'block';
-        nextBtn.style.display = 'block';
-      } else {
-        track.style.transform = 'translateX(0)';
-        prevBtn.style.display = 'none';
-        nextBtn.style.display = 'none';
-      }
-    }
+let stars=[];
 
-    updateSlider();
-    window.addEventListener('resize', updateSlider);
-  </script>
+for(let i=0;i<120;i++){
+stars.push({
+x:Math.random()*canvas.width,
+y:Math.random()*canvas.height,
+r:Math.random()*1.2,
+v:Math.random()*0.25
+});
+}
+
+function animate(){
+
+ctx.clearRect(0,0,canvas.width,canvas.height);
+
+ctx.fillStyle="white";
+
+stars.forEach(s=>{
+
+s.y+=s.v;
+
+if(s.y>canvas.height){
+s.y=0;
+s.x=Math.random()*canvas.width;
+}
+
+ctx.beginPath();
+ctx.arc(s.x,s.y,s.r,0,Math.PI*2);
+ctx.fill();
+
+});
+
+requestAnimationFrame(animate);
+
+}
+
+animate();
+
+</script>
+
 </body>
 </html>
