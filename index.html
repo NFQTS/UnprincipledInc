@@ -1,283 +1,359 @@
 <!DOCTYPE html>
-<html lang="en" class="scroll-smooth">
+<html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ri$keee • Share. Earn.</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
-    <style>
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&amp;family=Space+Grotesk:wght@500;600&amp;display=swap');
-        
-        body {
-            font-family: 'Inter', system_ui, sans-serif;
-        }
-        
-        .title-font {
-            font-family: 'Space Grotesk', sans-serif;
-        }
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>SASA</title>
 
-        .star-canvas {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: -1;
-            background: radial-gradient(circle at center, #0a0a1f 0%, #000000 70%);
-        }
+<style>
+:root {
+	--bg:#07070c;
+	--card:#141420;
+	--muted:#8a8aa3;
+	--text:#f5f5f7;
+	--accent:#6c7cff;
+	--border:#23233a;
+}
 
-        .toggle-switch {
-            position: relative;
-            display: inline-block;
-            width: 52px;
-            height: 28px;
-        }
-        
-        .toggle-switch input { opacity: 0; width: 0; height: 0; }
-        
-        .slider {
-            position: absolute;
-            cursor: pointer;
-            top: 0; left: 0; right: 0; bottom: 0;
-            background-color: #334155;
-            transition: .3s;
-            border-radius: 9999px;
-        }
-        
-        .slider:before {
-            position: absolute;
-            content: "";
-            height: 22px; width: 22px;
-            left: 3px; bottom: 3px;
-            background-color: white;
-            transition: .3s;
-            border-radius: 50%;
-        }
-        
-        input:checked + .slider {
-            background-color: rgb(234 179 8);
-        }
-        
-        input:checked + .slider:before {
-            transform: translateX(24px);
-        }
+body {
+	margin:0;
+	font-family:system-ui;
+	background:var(--bg);
+	color:var(--text);
+	display:flex;
+	justify-content:center;
+	overflow-x:hidden;
+}
 
-        .data-card {
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-        
-        .data-card:hover {
-            transform: translateY(-4px);
-        }
-    </style>
+#stars {
+	position:fixed;
+	inset:0;
+	z-index:0;
+}
+
+.container {
+	position:relative;
+	z-index:1;
+	width:100%;
+	max-width:520px;
+	padding:18px;
+	min-height:100vh;
+	box-sizing:border-box;
+}
+
+header {
+	text-align:center;
+	margin:18px 0;
+}
+
+h1 { margin:0; font-size:20px; }
+
+.sub {
+	font-size:12px;
+	color:var(--muted);
+	margin-top:6px;
+}
+
+textarea {
+	width:100%;
+	height:70px;
+	border-radius:12px;
+	border:1px solid var(--border);
+	padding:10px;
+	background:rgba(20,20,32,0.7);
+	color:var(--text);
+	font-size:13px;
+	box-sizing:border-box;
+}
+
+button {
+	width:100%;
+	margin-top:10px;
+	padding:11px;
+	border:none;
+	border-radius:12px;
+	background:var(--accent);
+	color:#fff;
+	font-size:13px;
+}
+
+.section-title {
+	font-size:11px;
+	color:var(--muted);
+	margin:14px 0 8px;
+	letter-spacing:1px;
+	text-transform:uppercase;
+}
+
+/* ---------------- CARD ---------------- */
+
+.card {
+	background:rgba(20,20,32,0.85);
+	border:1px solid var(--border);
+	border-radius:12px;
+	padding:10px;
+	margin-bottom:10px;
+
+	animation:fadeIn 0.18s ease-out;
+	transition:transform 0.15s ease;
+}
+
+.card:hover {
+	transform:translateY(-2px);
+}
+
+@keyframes fadeIn {
+	from { opacity:0; transform:translateY(6px); }
+	to { opacity:1; transform:translateY(0); }
+}
+
+.text {
+	font-size:13px;
+	line-height:1.4;
+}
+
+.meta {
+	margin-top:8px;
+	display:flex;
+	justify-content:space-between;
+	font-size:11px;
+	color:var(--muted);
+}
+
+.actions {
+	margin-top:8px;
+	display:flex;
+	gap:8px;
+}
+
+.small-btn {
+	flex:1;
+	font-size:11px;
+	padding:8px;
+	border-radius:10px;
+	border:1px solid var(--border);
+	background:transparent;
+	color:var(--muted);
+}
+
+/* ---------------- MODAL ---------------- */
+
+.modal {
+	position:fixed;
+	inset:0;
+	background:rgba(0,0,0,0.65);
+	display:none;
+	align-items:center;
+	justify-content:center;
+	z-index:10;
+}
+
+.modal-box {
+	width:90%;
+	max-width:320px;
+	background:var(--card);
+	border:1px solid var(--border);
+	border-radius:14px;
+	padding:14px;
+}
+
+.modal input {
+	width:100%;
+	padding:10px;
+	border-radius:10px;
+	border:1px solid var(--border);
+	background:#0f0f18;
+	color:var(--text);
+	font-size:13px;
+	box-sizing:border-box;
+	margin-bottom:8px;
+}
+</style>
 </head>
-<body class="bg-black text-white min-h-screen overflow-x-hidden">
-    <!-- Starfield -->
-    <canvas id="starCanvas" class="star-canvas"></canvas>
 
-    <div class="relative z-10 min-h-screen flex flex-col">
-        <!-- Minimal Navbar -->
-        <nav class="border-b border-white/10 backdrop-blur-lg bg-black/70 fixed w-full z-50">
-            <div class="max-w-5xl mx-auto px-6 py-5 flex items-center justify-between">
-                <div class="flex items-center gap-x-3">
-                    <div class="w-8 h-8 rounded-2xl bg-yellow-500 flex items-center justify-center text-black font-bold text-xl">$</div>
-                    <span class="title-font text-3xl tracking-tighter font-semibold">Ri$keee</span>
-                </div>
-                <button onclick="connectWallet()" 
-                        class="px-6 py-2.5 bg-white text-black rounded-2xl font-semibold hover:bg-yellow-400 transition-all">
-                    Connect Wallet
-                </button>
-            </div>
-        </nav>
+<body>
+<canvas id="stars"></canvas>
 
-        <main class="flex-1 flex items-center justify-center pt-20 px-6 pb-12">
-            <div class="max-w-xl w-full mx-auto text-center">
-                <!-- Hero -->
-                <div class="mb-12">
-                    <h1 class="title-font text-6xl md:text-7xl font-semibold tracking-tighter leading-none mb-6">
-                        Share info<br>
-                        <span class="bg-gradient-to-r from-yellow-300 to-amber-300 bg-clip-text text-transparent">Get paid</span>
-                    </h1>
-                    
-                    <p class="text-lg md:text-xl text-gray-400 max-w-md mx-auto">
-                        Own your data <br> Earn rewards for sharing
-                    </p>
-                </div>
+<div class="container">
 
-                <!-- Reward Meter -->
-                <div class="mb-10 bg-white/5 border border-white/10 rounded-3xl p-8 backdrop-blur-xl">
-                    <div class="flex justify-between items-end mb-6">
-                        <div class="text-left">
-                            <div class="text-sm text-gray-400">Your estimated monthly earnings</div>
-                            <div id="rewardAmount" class="text-6xl md:text-7xl font-bold text-yellow-400 tracking-tighter">$428</div>
-                            <div class="text-emerald-400 font-medium">USDT</div>
-                        </div>
-                        <div class="text-right">
-                            <div class="text-xs uppercase tracking-widest text-gray-500">Selected</div>
-                            <div id="toggleCount" class="text-5xl font-mono font-bold text-white/70">0/7</div>
-                        </div>
-                    </div>
-                    
-                    <div class="h-2.5 bg-white/10 rounded-full overflow-hidden">
-                        <div id="rewardBar" class="h-2.5 bg-gradient-to-r from-yellow-400 to-amber-300 rounded-full w-0 transition-all duration-700"></div>
-                    </div>
-                </div>
+<header>
+	<h1>SASA</h1>
+	<div class="sub">Problems Are Opportunities!</div>
+</header>
 
-                <!-- Toggles -->
-                <div class="bg-white/5 border border-white/10 rounded-3xl p-6 md:p-8 backdrop-blur-xl text-left">
-                    <div class="uppercase text-xs tracking-widest text-gray-400 mb-6 flex items-center gap-x-2">
-                        <i class="fa-solid fa-shield-halved"></i>
-                        WHAT DO YOU WANT TO SHARE?
-                    </div>
-                    
-                    <div id="toggles" class="space-y-4">
-                        <!-- Populated by JS -->
-                    </div>
-                </div>
+<textarea id="input" placeholder="What should be built?"></textarea>
+<button onclick="attemptSubmit()">Submit</button>
 
-                <!-- CTA -->
-                <div class="mt-10">
-                    <button onclick="submitData()" 
-                            class="w-full py-7 px-8 bg-white hover:bg-yellow-400 text-black font-semibold text-2xl rounded-3xl transition-all active:scale-95 shadow-xl">
-                        Share Selected • Start Earning USDT
-                    </button>
-                    <p class="text-xs text-gray-500 mt-5">🔒 Your data is encrypted • Only shared with your consent</p>
-                </div>
-            </div>
-        </main>
+<div class="section-title">Requests</div>
+<div id="feed"></div>
 
-        <div class="text-center py-8 text-xs text-gray-500">
-            Ri$keee Prototype • Data stays yours
-        </div>
-    </div>
+</div>
 
-    <script>
-        const options = [
-            { id: "email", label: "Email Address", icon: "fa-envelope", value: 65 },
-            { id: "sms", label: "Phone / SMS", icon: "fa-mobile-screen", value: 55 },
-            { id: "selfie", label: "Verified Selfie", icon: "fa-camera", value: 95 },
-            { id: "location", label: "Location (GPS)", icon: "fa-location-dot", value: 75 },
-            { id: "social", label: "Social Handles", icon: "fa-share-nodes", value: 60 },
-            { id: "wallet", label: "Crypto Wallets", icon: "fa-wallet", value: 110 },
-            { id: "content", label: "Art / Content Reach", icon: "fa-palette", value: 85 }
-        ];
+<!-- MODAL -->
+<div class="modal" id="modal">
+	<div class="modal-box">
+		<input id="username" placeholder="username" />
+		<input id="email" placeholder="email" />
+		<button onclick="confirmSubmit()">Continue</button>
+	</div>
+</div>
 
-        function createToggles() {
-            const container = document.getElementById('toggles');
-            container.innerHTML = '';
-            
-            options.forEach(opt => {
-                const div = document.createElement('div');
-                div.className = `data-card flex items-center justify-between bg-white/5 hover:bg-white/10 border border-white/10 rounded-2xl px-6 py-5`;
-                div.innerHTML = `
-                    <div class="flex items-center gap-x-4">
-                        <div class="w-9 h-9 flex items-center justify-center text-yellow-400 bg-white/10 rounded-2xl">
-                            <i class="fa-solid ${opt.icon} text-2xl"></i>
-                        </div>
-                        <div>
-                            <div class="font-medium text-base">${opt.label}</div>
-                            <div class="text-emerald-400 text-sm">+$${opt.value} USDT/mo</div>
-                        </div>
-                    </div>
-                    <label class="toggle-switch">
-                        <input type="checkbox" id="${opt.id}" onchange="updateReward()">
-                        <span class="slider"></span>
-                    </label>
-                `;
-                container.appendChild(div);
-            });
-        }
+<script>
 
-        function createStarfield() {
-            const canvas = document.getElementById('starCanvas');
-            const ctx = canvas.getContext('2d');
-            
-            function resize() {
-                canvas.width = window.innerWidth;
-                canvas.height = window.innerHeight;
-            }
-            window.addEventListener('resize', resize);
-            resize();
-            
-            let stars = [];
-            for (let i = 0; i < 900; i++) {
-                stars.push({
-                    x: Math.random() * canvas.width,
-                    y: Math.random() * canvas.height,
-                    size: Math.random() * 2.4,
-                    speed: Math.random() * 0.9 + 0.4
-                });
-            }
-            
-            function animate() {
-                ctx.fillStyle = 'rgba(3, 3, 15, 0.18)';
-                ctx.fillRect(0, 0, canvas.width, canvas.height);
-                
-                ctx.fillStyle = '#ffffff';
-                for (let star of stars) {
-                    ctx.globalAlpha = Math.random() * 0.7 + 0.5;
-                    ctx.fillRect(star.x, star.y, star.size, star.size);
-                    star.y += star.speed;
-                    if (star.y > canvas.height) {
-                        star.y = 0;
-                        star.x = Math.random() * canvas.width;
-                    }
-                }
-                ctx.globalAlpha = 1;
-                requestAnimationFrame(animate);
-            }
-            animate();
-        }
+/* ---------------- STORAGE ---------------- */
 
-        function updateReward() {
-            let sum = 0;
-            let count = 0;
-            
-            options.forEach(opt => {
-                const cb = document.getElementById(opt.id);
-                if (cb && cb.checked) {
-                    sum += opt.value;
-                    count++;
-                }
-            });
-            
-            const total = 0 + sum;
-            document.getElementById('rewardAmount').textContent = '$' + total;
-            document.getElementById('toggleCount').textContent = count + '/7';
-            
-            const progress = Math.min(100, (count / 7) * 100 + 30);
-            document.getElementById('rewardBar').style.width = progress + '%';
-        }
+function getStore(){
+	return JSON.parse(localStorage.getItem("sasa")||"[]");
+}
 
-        function connectWallet() {
-            alert("✅ Wallet connected (demo)");
-        }
+function setStore(v){
+	localStorage.setItem("sasa",JSON.stringify(v));
+}
 
-        function submitData() {
-            const checkedCount = options.filter(opt => document.getElementById(opt.id).checked).length;
-            if (checkedCount === 0) {
-                alert("Please select at least one option.");
-                return;
-            }
-            const total = parseInt(document.getElementById('rewardAmount').textContent.replace('$',''));
-            alert(`✅ Success!\n\nThank you for trying our demo :) we will be launching our products soon enough.`);
-        }
+/* ---------------- FLOW ---------------- */
 
-        window.onload = () => {
-            createToggles();
-            createStarfield();
-            updateReward();
-            
-            // Pre-select a few for demo
-            setTimeout(() => {
-                ['wallet', 'selfie', 'content'].forEach(id => {
-                    const el = document.getElementById(id);
-                    if (el) el.checked = true;
-                });
-                updateReward();
-            }, 600);
-        };
-    </script>
+let pendingText="";
+
+function attemptSubmit(){
+	const t=document.getElementById("input").value.trim();
+	if(!t) return;
+	pendingText=t;
+	document.getElementById("modal").style.display="flex";
+}
+
+function confirmSubmit(){
+	const u=document.getElementById("username").value.trim();
+	const e=document.getElementById("email").value.toLowerCase().trim();
+	if(!u || !e.includes("@")) return;
+
+	const data=getStore();
+
+	if(data.some(x=>x.email===e)){
+		alert("Email already used.");
+		return;
+	}
+
+	data.push({
+		text:pendingText,
+		username:u,
+		email:e,
+		upvotes:0,
+		time:Date.now()
+	});
+
+	setStore(data);
+
+	pendingText="";
+	document.getElementById("input").value="";
+	document.getElementById("modal").style.display="none";
+
+	render();
+}
+
+/* ---------------- UPVOTE ---------------- */
+
+function upvote(i){
+	const d=getStore();
+	const k="v_"+i;
+	if(localStorage.getItem(k)) return;
+
+	d[i].upvotes=(d[i].upvotes||0)+1;
+	setStore(d);
+	localStorage.setItem(k,"1");
+	render();
+}
+
+/* ---------------- X SHARE ---------------- */
+
+function xShare(text){
+	const msg =
+`${text}
+
+Build this on SASA
+@unprincipledinc`;
+
+	const url="https://twitter.com/intent/tweet?text="+encodeURIComponent(msg);
+	window.open(url,"_blank");
+}
+
+/* ---------------- RENDER ---------------- */
+
+function render(){
+	const feed=document.getElementById("feed");
+	const data=getStore();
+
+	feed.innerHTML="";
+
+	if(!data.length){
+		feed.innerHTML="<div style='color:#8a8aa3;font-size:12px'>No requests yet</div>";
+		return;
+	}
+
+	[...data].reverse().forEach((item,i)=>{
+		const real=data.length-1-i;
+
+		const el=document.createElement("div");
+		el.className="card";
+
+		el.innerHTML=`
+			<div class="text">${item.text}</div>
+
+			<div class="meta">
+				<span>▲ ${item.upvotes||0}</span>
+				<span>by ${item.username}</span>
+			</div>
+
+			<div class="actions">
+				<button class="small-btn" onclick="upvote(${real})">Upvote</button>
+				<button class="small-btn" onclick="xShare(\`${item.text.replace(/`/g,'')}\`)">Share X</button>
+			</div>
+		`;
+
+		feed.appendChild(el);
+	});
+}
+
+render();
+
+/* ---------------- STARFIELD (twinkle version) ---------------- */
+
+const c=document.getElementById("stars");
+const ctx=c.getContext("2d");
+
+let stars=[];
+
+function resize(){
+	c.width=innerWidth;
+	c.height=innerHeight;
+
+	stars=Array.from({length:80},()=>({
+		x:Math.random()*c.width,
+		y:Math.random()*c.height,
+		r:Math.random()*1.3,
+		p:Math.random()*Math.PI*2
+	}));
+}
+
+function draw(){
+	ctx.clearRect(0,0,c.width,c.height);
+
+	for(let s of stars){
+		ctx.globalAlpha=0.2+Math.sin(s.p)*0.2;
+		ctx.beginPath();
+		ctx.arc(s.x,s.y,s.r,0,Math.PI*2);
+		ctx.fillStyle="white";
+		ctx.fill();
+
+		s.p+=0.01;
+	}
+
+	requestAnimationFrame(draw);
+}
+
+resize();
+draw();
+window.addEventListener("resize",resize);
+
+</script>
 </body>
 </html>
