@@ -6,354 +6,279 @@
 <title>SASA</title>
 
 <style>
-:root {
+:root{
 	--bg:#07070c;
 	--card:#141420;
-	--muted:#8a8aa3;
 	--text:#f5f5f7;
-	--accent:#6c7cff;
+	--muted:#8a8aa3;
 	--border:#23233a;
+	--accent:#6c7cff;
 }
 
-body {
+body{
 	margin:0;
 	font-family:system-ui;
 	background:var(--bg);
 	color:var(--text);
 	display:flex;
 	justify-content:center;
-	overflow-x:hidden;
-}
-
-#stars {
-	position:fixed;
-	inset:0;
-	z-index:0;
-}
-
-.container {
-	position:relative;
-	z-index:1;
-	width:100%;
-	max-width:520px;
-	padding:18px;
+	align-items:center;
 	min-height:100vh;
-	box-sizing:border-box;
 }
 
-header {
+.container{
+	width:100%;
+	max-width:420px;
+	padding:20px;
+	display:flex;
+	flex-direction:column;
+	align-items:center;
+	gap:12px;
 	text-align:center;
-	margin:18px 0;
 }
 
-h1 { margin:0; font-size:20px; }
-
-.sub {
-	font-size:12px;
-	color:var(--muted);
-	margin-top:6px;
+h1{
+	margin:0;
+	font-size:20px;
 }
 
-textarea {
-	width:100%;
-	height:70px;
-	border-radius:12px;
-	border:1px solid var(--border);
-	padding:10px;
-	background:rgba(20,20,32,0.7);
-	color:var(--text);
-	font-size:13px;
-	box-sizing:border-box;
-}
-
-button {
-	width:100%;
-	margin-top:10px;
-	padding:11px;
-	border:none;
-	border-radius:12px;
-	background:var(--accent);
-	color:#fff;
-	font-size:13px;
-}
-
-.section-title {
+.sub{
 	font-size:11px;
 	color:var(--muted);
-	margin:14px 0 8px;
-	letter-spacing:1px;
-	text-transform:uppercase;
+	margin-bottom:10px;
 }
 
-/* ---------------- CARD ---------------- */
+/* CARD */
 
-.card {
+.card{
+	width:100%;
 	background:rgba(20,20,32,0.85);
 	border:1px solid var(--border);
-	border-radius:12px;
-	padding:10px;
-	margin-bottom:10px;
-
-	animation:fadeIn 0.18s ease-out;
-	transition:transform 0.15s ease;
+	border-radius:14px;
+	padding:14px;
+	cursor:pointer;
+	transition:transform .1s ease, border .15s ease;
+	text-align:left;
 }
 
-.card:hover {
-	transform:translateY(-2px);
+.card:active{
+	transform:scale(0.98);
 }
 
-@keyframes fadeIn {
-	from { opacity:0; transform:translateY(6px); }
-	to { opacity:1; transform:translateY(0); }
+.card:hover{
+	border-color:var(--accent);
 }
 
-.text {
+.top{
+	font-size:16px;
+	font-weight:700;
+}
+
+.mid{
 	font-size:13px;
-	line-height:1.4;
-}
-
-.meta {
-	margin-top:8px;
-	display:flex;
-	justify-content:space-between;
-	font-size:11px;
 	color:var(--muted);
+	margin-top:2px;
 }
 
-.actions {
-	margin-top:8px;
-	display:flex;
-	gap:8px;
-}
-
-.small-btn {
-	flex:1;
+.bottom{
 	font-size:11px;
-	padding:8px;
-	border-radius:10px;
-	border:1px solid var(--border);
-	background:transparent;
-	color:var(--muted);
+	color:#6f6f86;
+	margin-top:4px;
 }
 
-/* ---------------- MODAL ---------------- */
+/* MODAL */
 
-.modal {
+.modal{
 	position:fixed;
 	inset:0;
-	background:rgba(0,0,0,0.65);
+	background:rgba(0,0,0,0.7);
 	display:none;
 	align-items:center;
 	justify-content:center;
-	z-index:10;
 }
 
-.modal-box {
+.box{
 	width:90%;
 	max-width:320px;
 	background:var(--card);
 	border:1px solid var(--border);
 	border-radius:14px;
 	padding:14px;
+	display:flex;
+	flex-direction:column;
+	gap:8px;
 }
 
-.modal input {
-	width:100%;
+input{
 	padding:10px;
 	border-radius:10px;
 	border:1px solid var(--border);
 	background:#0f0f18;
 	color:var(--text);
 	font-size:13px;
-	box-sizing:border-box;
-	margin-bottom:8px;
+}
+
+button{
+	padding:10px;
+	border:none;
+	border-radius:10px;
+	background:var(--accent);
+	color:white;
+	font-size:13px;
+	cursor:pointer;
+}
+
+.small{
+	font-size:11px;
+	color:var(--muted);
 }
 </style>
 </head>
 
 <body>
-<canvas id="stars"></canvas>
 
 <div class="container">
 
-<header>
 	<h1>SASA</h1>
-	<div class="sub">Problems Are Opportunities!</div>
-</header>
+	<div class="sub">chagua tatizo</div>
 
-<textarea id="input" placeholder="What should be built?"></textarea>
-<button onclick="attemptSubmit()">Submit</button>
+	<div class="card" onclick="submitFixed('💸','pesa')">
+		<div class="top">💸 Pesa</div>
+		<div class="mid">Money / Income</div>
+		<div class="bottom">financial pressure or opportunity</div>
+	</div>
 
-<div class="section-title">Requests</div>
-<div id="feed"></div>
+	<div class="card" onclick="submitFixed('⏳','muda')">
+		<div class="top">⏳ Muda</div>
+		<div class="mid">Time / Efficiency</div>
+		<div class="bottom">lack of time or productivity friction</div>
+	</div>
+
+	<div class="card" onclick="submitFixed('📚','elimu')">
+		<div class="top">📚 Elimu</div>
+		<div class="mid">Learning / Skills</div>
+		<div class="bottom">education, skills, knowledge gaps</div>
+	</div>
+
+	<div class="card" onclick="openIdea()">
+		<div class="top">➕ Wazo</div>
+		<div class="mid">Add new category</div>
+		<div class="bottom">define a new type of problem</div>
+	</div>
+
+	<div class="card" onclick="openMap()">
+		<div class="top">🗺 Ramani</div>
+		<div class="mid">Heatmap (coming soon)</div>
+		<div class="bottom">see regional demand signals</div>
+	</div>
 
 </div>
 
-<!-- MODAL -->
-<div class="modal" id="modal">
-	<div class="modal-box">
-		<input id="username" placeholder="username" />
-		<input id="email" placeholder="email" />
-		<button onclick="confirmSubmit()">Continue</button>
+<!-- IDEA MODAL -->
+<div class="modal" id="ideaModal">
+	<div class="box">
+		<input id="emoji" placeholder="emoji (e.g. 💡)"/>
+		<input id="swahili" placeholder="swahili word (e.g. shida)"/>
+		<input id="english" placeholder="english context (e.g. problem type)"/>
+		<button onclick="submitIdea()">tuma</button>
+	</div>
+</div>
+
+<!-- MAP MODAL -->
+<div class="modal" id="mapModal">
+	<div class="box">
+		<div class="top">🗺 Ramani</div>
+		<div class="small">heatmap system in development</div>
+		<button onclick="closeMap()">close</button>
 	</div>
 </div>
 
 <script>
 
-/* ---------------- STORAGE ---------------- */
+let regionCache = null;
 
-function getStore(){
-	return JSON.parse(localStorage.getItem("sasa")||"[]");
-}
+/* ---------------- IP GEO ---------------- */
 
-function setStore(v){
-	localStorage.setItem("sasa",JSON.stringify(v));
-}
+async function getRegion(){
+	if(regionCache) return regionCache;
 
-/* ---------------- FLOW ---------------- */
+	try{
+		const res = await fetch("https://ipapi.co/json/");
+		const data = await res.json();
 
-let pendingText="";
+		regionCache = {
+			country: data.country_name,
+			region: data.region,
+			city: data.city
+		};
 
-function attemptSubmit(){
-	const t=document.getElementById("input").value.trim();
-	if(!t) return;
-	pendingText=t;
-	document.getElementById("modal").style.display="flex";
-}
-
-function confirmSubmit(){
-	const u=document.getElementById("username").value.trim();
-	const e=document.getElementById("email").value.toLowerCase().trim();
-	if(!u || !e.includes("@")) return;
-
-	const data=getStore();
-
-	if(data.some(x=>x.email===e)){
-		alert("Email already used.");
-		return;
+		return regionCache;
+	}catch(e){
+		return {country:"unknown",region:"unknown",city:"unknown"};
 	}
+}
 
-	data.push({
-		text:pendingText,
-		username:u,
-		email:e,
-		upvotes:0,
-		time:Date.now()
+/* ---------------- SUBMIT ---------------- */
+
+async function submitFixed(emoji, category){
+
+	const loc = await getRegion();
+
+	const payload = {
+		emoji,
+		category,
+		location: loc,
+		timestamp: Date.now()
+	};
+
+	console.log("EVENT:", payload);
+
+	alert(`${emoji} ${category} saved`);
+}
+
+/* ---------------- IDEA ---------------- */
+
+function openIdea(){
+	document.getElementById("ideaModal").style.display="flex";
+}
+
+function submitIdea(){
+	const emoji = document.getElementById("emoji").value.trim();
+	const swahili = document.getElementById("swahili").value.trim();
+	const english = document.getElementById("english").value.trim();
+
+	if(!emoji || !swahili) return;
+
+	console.log("CUSTOM CATEGORY:", {
+		emoji,
+		swahili,
+		english
 	});
 
-	setStore(data);
-
-	pendingText="";
-	document.getElementById("input").value="";
-	document.getElementById("modal").style.display="none";
-
-	render();
+	document.getElementById("emoji").value="";
+	document.getElementById("swahili").value="";
+	document.getElementById("english").value="";
+	document.getElementById("ideaModal").style.display="none";
 }
 
-/* ---------------- UPVOTE ---------------- */
+/* ---------------- MAP ---------------- */
 
-function upvote(i){
-	const d=getStore();
-	const k="v_"+i;
-	if(localStorage.getItem(k)) return;
-
-	d[i].upvotes=(d[i].upvotes||0)+1;
-	setStore(d);
-	localStorage.setItem(k,"1");
-	render();
+function openMap(){
+	document.getElementById("mapModal").style.display="flex";
 }
 
-/* ---------------- X SHARE ---------------- */
-
-function xShare(text){
-	const msg =
-`${text}
-
-Build this on SASA
-@unprincipledinc`;
-
-	const url="https://twitter.com/intent/tweet?text="+encodeURIComponent(msg);
-	window.open(url,"_blank");
+function closeMap(){
+	document.getElementById("mapModal").style.display="none";
 }
 
-/* ---------------- RENDER ---------------- */
-
-function render(){
-	const feed=document.getElementById("feed");
-	const data=getStore();
-
-	feed.innerHTML="";
-
-	if(!data.length){
-		feed.innerHTML="<div style='color:#8a8aa3;font-size:12px'>No requests yet</div>";
-		return;
+/* close modal */
+window.onclick = (e)=>{
+	if(e.target.classList.contains("modal")){
+		e.target.style.display="none";
 	}
-
-	[...data].reverse().forEach((item,i)=>{
-		const real=data.length-1-i;
-
-		const el=document.createElement("div");
-		el.className="card";
-
-		el.innerHTML=`
-			<div class="text">${item.text}</div>
-
-			<div class="meta">
-				<span>▲ ${item.upvotes||0}</span>
-				<span>by ${item.username}</span>
-			</div>
-
-			<div class="actions">
-				<button class="small-btn" onclick="upvote(${real})">Upvote</button>
-				<button class="small-btn" onclick="xShare(\`${item.text.replace(/`/g,'')}\`)">Share X</button>
-			</div>
-		`;
-
-		feed.appendChild(el);
-	});
-}
-
-render();
-
-/* ---------------- STARFIELD (twinkle version) ---------------- */
-
-const c=document.getElementById("stars");
-const ctx=c.getContext("2d");
-
-let stars=[];
-
-function resize(){
-	c.width=innerWidth;
-	c.height=innerHeight;
-
-	stars=Array.from({length:80},()=>({
-		x:Math.random()*c.width,
-		y:Math.random()*c.height,
-		r:Math.random()*1.3,
-		p:Math.random()*Math.PI*2
-	}));
-}
-
-function draw(){
-	ctx.clearRect(0,0,c.width,c.height);
-
-	for(let s of stars){
-		ctx.globalAlpha=0.2+Math.sin(s.p)*0.2;
-		ctx.beginPath();
-		ctx.arc(s.x,s.y,s.r,0,Math.PI*2);
-		ctx.fillStyle="white";
-		ctx.fill();
-
-		s.p+=0.01;
-	}
-
-	requestAnimationFrame(draw);
-}
-
-resize();
-draw();
-window.addEventListener("resize",resize);
+};
 
 </script>
+
 </body>
 </html>
