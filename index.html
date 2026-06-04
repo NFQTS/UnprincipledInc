@@ -1,345 +1,335 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>✳️💜🥷🏻Unprincipled Inc. Web3 OS🥷🏻💜✳️</title>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r134/three.min.js"></script>
-    <style>
-        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Press+Start+2P&display=swap');
-        
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body {
-            overflow: hidden;
-            background: #000;
-            color: #fff;
-            font-family: 'Orbitron', sans-serif;
-            height: 100vh;
-            position: relative;
-        }
-        
-        canvas { position: absolute; top: 0; left: 0; z-index: 1; }
-        
-        .content {
-            position: relative;
-            z-index: 2;
-            height: 100vh;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            text-align: center;
-            padding: 20px;
-        }
-        
-        .logo {
-            font-size: 2.8rem;
-            font-weight: 900;
-            letter-spacing: 0.4em;
-            margin-bottom: 1.5rem;
-            background: linear-gradient(90deg, #fff, #aaa, #fff);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            text-shadow: 0 0 30px rgba(255,255,255,0.6);
-            opacity: 0;
-            transition: opacity 1.5s ease;
-        }
-        
-        .teaser {
-            font-family: 'Press Start 2P', cursive;
-            font-size: 1.25rem;
-            margin: 1.2rem 0;
-            min-height: 90px;
-            background: linear-gradient(90deg, #ff00ff, #00ffff, #ffff00, #ff00ff);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-size: 300% 300%;
-            animation: rainbow 6s linear infinite;
-            text-shadow: 0 0 20px rgba(255,255,255,0.5);
-            opacity: 0;
-            transition: all 0.6s cubic-bezier(0.23, 1, 0.32, 1);
-        }
-        
-        .reveal {
-            font-size: 3.8rem;
-            font-weight: 900;
-            letter-spacing: 0.15em;
-            margin: 2.5rem 0 2rem;
-            color: #fff;
-            text-shadow: 0 0 40px #fff,
-                         0 0 80px #ff00ff;
-            opacity: 0;
-            animation: pulse 4s infinite alternate;
-        }
-        
-        .blurred-art {
-            width: 340px;
-            height: 340px;
-            background: #111;
-            border: 3px solid #fff;
-            box-shadow: 0 0 60px rgba(255,255,255,0.4),
-                        inset 0 0 60px rgba(255,255,255,0.1);
-            margin: 2rem 0;
-            position: relative;
-            overflow: hidden;
-            border-radius: 4px;
-            transition: all 0.8s ease;
-        }
-        
-        .blurred-art::before {
-            content: '';
-            position: absolute;
-            inset: -50%;
-            background: repeating-linear-gradient(
-                45deg,
-                transparent,
-                transparent 10px,
-                rgba(255,255,255,0.08) 10px,
-                rgba(255,255,255,0.08) 20px
-            );
-            animation: scan 3s linear infinite;
-            opacity: 0.4;
-        }
-        
-        .blurred-art img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            filter: blur(18px) contrast(0.85) brightness(0.7);
-            transition: filter 1.2s ease;
-        }
-        
-        .active .blurred-art img {
-            filter: blur(6px) contrast(1.1) brightness(1.3);
-        }
-        
-        .scanline {
-            position: absolute;
-            top: -100%;
-            left: 0;
-            width: 100%;
-            height: 6px;
-            background: linear-gradient(transparent, rgba(255,255,255,0.9), transparent);
-            box-shadow: 0 0 20px #fff;
-            animation: scanline-anim 5s linear infinite;
-            opacity: 0.25;
-        }
-        
-        .signal-button {
-            margin-top: 2rem;
-            padding: 18px 48px;
-            font-family: 'Press Start 2P', cursive;
-            font-size: 1.1rem;
-            letter-spacing: 2px;
-            background: transparent;
-            color: #fff;
-            border: 3px solid #fff;
-            cursor: pointer;
-            position: relative;
-            overflow: hidden;
-            transition: all 0.4s ease;
-            text-transform: uppercase;
-            box-shadow: 0 0 30px rgba(255,255,255,0.5);
-        }
-        
-        .signal-button:hover {
-            background: #fff;
-            color: #000;
-            box-shadow: 0 0 50px #fff;
-            transform: scale(1.05);
-        }
-        
-        .signal-button::before {
-            content: '';
-            position: absolute;
-            top: -50%;
-            left: -100%;
-            width: 50%;
-            height: 200%;
-            background: linear-gradient(
-                120deg,
-                transparent,
-                rgba(255,255,255,0.4),
-                transparent
-            );
-            transition: 0.7s;
-        }
-        
-        .signal-button:hover::before {
-            left: 300%;
-        }
-        
-        .footer {
-            position: absolute;
-            bottom: 40px;
-            font-size: 0.75rem;
-            letter-spacing: 4px;
-            opacity: 0.5;
-            color: #aaa;
-        }
-        
-        @keyframes rainbow {
-            0% { background-position: 0% 50%; }
-            100% { background-position: 300% 50%; }
-        }
-        
-        @keyframes pulse {
-            from { text-shadow: 0 0 30px #fff; }
-            to { text-shadow: 0 0 70px #ff00ff, 0 0 100px #00ffff; }
-        }
-        
-        @keyframes scan { 0% { transform: translateX(-150%); } 100% { transform: translateX(250%); } }
-        @keyframes scanline-anim { 0% { top: -150%; } 100% { top: 350%; } }
-    </style>
+	<meta charset="UTF-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+	<title>✳️💜🥷🏻Unprincipled Inc. Web3 OS🥷🏻💜✳️</title>
+
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r134/three.min.js"></script>
+
+	<style>
+		@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Press+Start+2P&display=swap');
+
+		* { margin: 0; padding: 0; box-sizing: border-box; }
+
+		body {
+			background: #000;
+			color: #fff;
+			font-family: 'Orbitron', sans-serif;
+			position: relative;
+			overflow-y: auto;
+			min-height: 100vh;
+		}
+
+		canvas#space {
+			position: fixed;
+			top: 0; left: 0;
+			z-index: 1;
+			width: 100%; height: 100%;
+			pointer-events: none;
+		}
+
+		.content {
+			position: relative;
+			z-index: 2;
+			display: flex;
+			flex-direction: column;
+			align-items: center;
+			text-align: center;
+			padding: 20px 15px 100px;
+			max-width: 100%;
+			margin: 0 auto;
+			gap: 1.2rem;
+			min-height: 100vh;
+		}
+
+		.logo {
+			font-size: clamp(1.9rem, 6vw, 2.9rem);
+			font-weight: 900;
+			letter-spacing: 0.35em;
+			margin-top: 1rem;
+			background: linear-gradient(90deg, #fff, #aaa, #fff);
+			-webkit-background-clip: text;
+			-webkit-text-fill-color: transparent;
+			text-shadow: 0 0 30px rgba(255,255,255,0.6);
+		}
+
+		.reveal {
+			font-size: clamp(2.3rem, 7.5vw, 3.6rem);
+			font-weight: 900;
+			letter-spacing: 0.12em;
+			color: #fff;
+			text-shadow: 0 0 40px #fff, 0 0 80px #ff00ff;
+			opacity: 0;
+			animation: pulse 4s infinite alternate;
+			margin-bottom: 0.5rem;
+		}
+
+		.teaser {
+			font-family: 'Press Start 2P', cursive;
+			font-size: clamp(1rem, 3.5vw, 1.25rem);
+			min-height: 68px;
+			background: linear-gradient(90deg, #ff00ff, #00ffff, #ffff00, #ff00ff);
+			-webkit-background-clip: text;
+			-webkit-text-fill-color: transparent;
+			background-size: 300% 300%;
+			animation: rainbow 6s linear infinite;
+			text-shadow: 0 0 20px rgba(255,255,255,0.5);
+		}
+
+		.blurred-art {
+			width: min(320px, 88vw);
+			height: min(320px, 88vw);
+			background: #111;
+			border: 3px solid #fff;
+			box-shadow: 0 0 60px rgba(255,255,255,0.4), inset 0 0 60px rgba(255,255,255,0.1);
+			margin: 0.8rem 0;
+			border-radius: 6px;
+		}
+
+		.trampoline-game {
+			width: 100%;
+			max-width: 420px;
+			margin: 10px auto;
+			padding: 16px;
+			border: 2px solid rgba(255,255,255,0.2);
+			background: rgba(0,0,0,0.5);
+			backdrop-filter: blur(12px);
+			border-radius: 12px;
+		}
+
+		.game-header {
+			font-family: 'Press Start 2P', cursive;
+			font-size: clamp(0.8rem, 2.6vw, 0.9rem);
+			margin-bottom: 12px;
+			color: #00ffff;
+		}
+
+		#trampolineGame {
+			display: block;
+			width: 100% !important;
+			height: auto !important;
+			max-width: 420px;
+			margin: 0 auto;
+			background: radial-gradient(circle, rgba(30,30,50,0.9), rgba(0,0,0,0.95));
+			border-radius: 10px;
+			border: 1px solid rgba(255,255,255,0.2);
+			cursor: pointer;
+		}
+
+		.game-stats {
+			display: flex;
+			justify-content: space-between;
+			margin-top: 10px;
+			font-size: clamp(0.78rem, 2.3vw, 0.82rem);
+		}
+
+		.game-tip {
+			margin-top: 10px;
+			font-size: clamp(0.68rem, 2.1vw, 0.72rem);
+			opacity: 0.75;
+		}
+
+		.signal-button {
+			margin-top: 1.2rem;
+			padding: clamp(15px, 4.5vw, 19px) clamp(40px, 10vw, 52px);
+			font-family: 'Press Start 2P', cursive;
+			font-size: clamp(1rem, 3.4vw, 1.12rem);
+			background: transparent;
+			color: #fff;
+			border: 3px solid #fff;
+			cursor: pointer;
+			transition: all 0.3s;
+			white-space: nowrap;
+		}
+
+		.signal-button:hover {
+			background: #fff;
+			color: #000;
+			transform: scale(1.03);
+		}
+
+		.footer {
+			margin-top: 2rem;
+			font-size: clamp(0.68rem, 2vw, 0.76rem);
+			opacity: 0.55;
+			text-align: center;
+		}
+
+		@keyframes rainbow {
+			0% { background-position: 0% 50%; }
+			100% { background-position: 300% 50%; }
+		}
+
+		@keyframes pulse {
+			from { text-shadow: 0 0 30px #fff; }
+			to { text-shadow: 0 0 75px #ff00ff; }
+		}
+	</style>
 </head>
 <body>
-    <canvas id="space"></canvas>
-    
-    <div class="content">
-        <!-- Swapped: SOMETHING IS COMING… is now at the top -->
-        <div class="reveal" id="reveal">SOMETHING IS COMING…</div>
-        
-        <div class="blurred-art" id="artContainer">
-            <div class="scanline"></div>
-            <img id="art1" src="https://picsum.photos/id/1015/800/800" alt="Lords & Ladies">
-            <img id="art2" src="https://picsum.photos/id/102/800/800" alt="Nobles" style="display:none;">
-            <img id="art3" src="https://picsum.photos/id/1036/800/800" alt="Peasants" style="display:none;">
-        </div>
-        
-        <div class="teaser" id="teaser">333 LORDS AND LADIES</div>
-        <div class="logo">UNPRINCIPLED INC.</div>
-        <button class="signal-button" onclick="handleSignal()">
-            SUPPORT WEB3 NOW
-        </button>
-        
-        <div class="footer">SOLANA • 2026 • TRANSMISSION INCOMING</div>
-    </div>
+	<canvas id="space"></canvas>
 
-    <script>
-        // Three.js Starfield
-        let scene, camera, renderer, particles;
-        
-        function initSpace() {
-            scene = new THREE.Scene();
-            camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 2000);
-            renderer = new THREE.WebGLRenderer({ canvas: document.getElementById('space'), alpha: true });
-            renderer.setSize(window.innerWidth, window.innerHeight);
-            renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-            
-            const geometry = new THREE.BufferGeometry();
-            const vertices = [];
-            const colors = [];
-            
-            for (let i = 0; i < 9000; i++) {
-                const x = Math.random() * 2000 - 1000;
-                const y = Math.random() * 2000 - 1000;
-                const z = Math.random() * 1800 - 900;
-                vertices.push(x, y, z);
-                
-                const intensity = Math.random();
-                colors.push(intensity, intensity, intensity);
-            }
-            
-            geometry.setAttribute('position', new THREE.Float32BufferAttribute(vertices, 3));
-            geometry.setAttribute('color', new THREE.Float32BufferAttribute(colors, 3));
-            
-            const material = new THREE.PointsMaterial({
-                size: 2.2,
-                vertexColors: true,
-                transparent: true,
-                opacity: 0.85,
-                blending: THREE.AdditiveBlending
-            });
-            
-            particles = new THREE.Points(geometry, material);
-            scene.add(particles);
-            camera.position.z = 5;
-        }
-        
-        function animateSpace() {
-            requestAnimationFrame(animateSpace);
-            
-            particles.rotation.y += 0.00008;
-            const pos = particles.geometry.attributes.position.array;
-            for (let i = 2; i < pos.length; i += 3) {
-                pos[i] += 4.5;
-                if (pos[i] > 900) pos[i] = -900;
-            }
-            particles.geometry.attributes.position.needsUpdate = true;
-            
-            renderer.render(scene, camera);
-        }
-        
-        window.addEventListener('resize', () => {
-            camera.aspect = window.innerWidth / window.innerHeight;
-            camera.updateProjectionMatrix();
-            renderer.setSize(window.innerWidth, window.innerHeight);
-        });
-        
-        // Teaser cycling
-        const teasers = [
-            { text: "333 LORDS AND LADIES", imgId: "art1" },
-            { text: "666 NOBLES", imgId: "art2" },
-            { text: "999 PEASANTS", imgId: "art3" }
-        ];
-        let current = 0;
-        const teaserEl = document.getElementById('teaser');
-        const artContainer = document.getElementById('artContainer');
-        
-        function cycleTeaser() {
-            current = (current + 1) % teasers.length;
-            
-            teaserEl.style.opacity = 0;
-            artContainer.classList.remove('active');
-            
-            setTimeout(() => {
-                teaserEl.textContent = teasers[current].text;
-                
-                document.querySelectorAll('#artContainer img').forEach(img => {
-                    img.style.display = 'none';
-                });
-                const newImg = document.getElementById(teasers[current].imgId);
-                newImg.style.display = 'block';
-                
-                teaserEl.style.opacity = 1;
-                artContainer.classList.add('active');
-            }, 650);
-        }
-        
-        // Simple, clean public signal
-        function handleSignal() {
-            const tweetText = encodeURIComponent(
-                "Locking in with @UnprincipledInc… LFG 🔥🚀🔥\n\n" +
-                "#TheResistance"
-            );
-            
-            window.open(`https://x.com/intent/tweet?text=${tweetText}`, '_blank');
-        }
-        
-        // Init everything
-        window.onload = () => {
-            initSpace();
-            animateSpace();
-            
-            // Staggered entrance - adjusted timing for new order
-            setTimeout(() => document.getElementById('reveal').style.opacity = 1, 400);
-            setTimeout(() => document.querySelector('.logo').style.opacity = 1, 900);
-            
-            setTimeout(() => {
-                artContainer.classList.add('active');
-                teaserEl.style.opacity = 1;
-            }, 1600);
-            
-            // Cycle every 5.2s
-            setInterval(cycleTeaser, 5200);
-            
-            // Subtle reveal pulse glitch
-            setInterval(() => {
-                const reveal = document.getElementById('reveal');
-                reveal.style.transform = 'scale(1.03)';
-                setTimeout(() => reveal.style.transform = 'scale(1)', 220);
-            }, 6800);
-        };
-    </script>
+	<div class="content">
+		<div class="reveal" id="reveal">SOMETHING IS COMING…</div>
+		
+		<div class="blurred-art"></div>
+		
+		<div class="teaser" id="teaser">333 LORDS AND LADIES</div>
+
+
+		<div class="trampoline-game">
+			<div class="game-header">🏀 SKY BOUNCE 🏀</div>
+			<canvas id="trampolineGame" width="420" height="260"></canvas>
+
+			<div class="game-stats">
+				<div>Height: <span id="heightScore">0</span></div>
+				<div>Best: <span id="bestScore">0</span></div>
+			</div>
+
+			<div class="game-tip">TAP WHEN BALL HITS TRAMPOLINE</div>
+		</div>
+
+		<button class="signal-button" onclick="handleSignal()">
+			SUPPORT WEB3 NOW
+		</button>
+
+		<div class="footer">SOLANA • 2026 • TRANSMISSION INCOMING</div>
+	</div>
+
+<script>
+/* ================= THREE.JS SPACE ================= */
+let scene, camera, renderer, particles;
+
+function initSpace() {
+	scene = new THREE.Scene();
+	camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 2000);
+	renderer = new THREE.WebGLRenderer({ canvas: document.getElementById("space"), alpha: true });
+	renderer.setSize(window.innerWidth, window.innerHeight);
+	renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+
+	const geometry = new THREE.BufferGeometry();
+	const vertices = [];
+	const colors = [];
+	for (let i = 0; i < 9000; i++) {
+		vertices.push(Math.random()*2000-1000, Math.random()*2000-1000, Math.random()*1800-900);
+		let c = Math.random();
+		colors.push(c, c, c);
+	}
+	geometry.setAttribute("position", new THREE.Float32BufferAttribute(vertices, 3));
+	geometry.setAttribute("color", new THREE.Float32BufferAttribute(colors, 3));
+
+	particles = new THREE.Points(geometry, new THREE.PointsMaterial({ size: 2, vertexColors: true, transparent: true }));
+	scene.add(particles);
+	camera.position.z = 5;
+}
+
+function resizeSpace() {
+	if (!camera || !renderer) return;
+	camera.aspect = window.innerWidth / window.innerHeight;
+	camera.updateProjectionMatrix();
+	renderer.setSize(window.innerWidth, window.innerHeight);
+}
+
+function animateSpace() {
+	requestAnimationFrame(animateSpace);
+	particles.rotation.y += 0.00008;
+	const pos = particles.geometry.attributes.position.array;
+	for (let i = 2; i < pos.length; i += 3) {
+		pos[i] += 4.5;
+		if (pos[i] > 900) pos[i] = -900;
+	}
+	particles.geometry.attributes.position.needsUpdate = true;
+	renderer.render(scene, camera);
+}
+
+/* Teaser */
+const teasers = ["333 LORDS AND LADIES", "666 NOBLES", "999 PEASANTS"];
+let tIndex = 0;
+function cycleTeaser() {
+	tIndex = (tIndex + 1) % teasers.length;
+	document.getElementById("teaser").textContent = teasers[tIndex];
+}
+
+/* Signal */
+function handleSignal() {
+	window.open("https://x.com/intent/tweet?text=" + encodeURIComponent("Joining Unprincipled Inc 🚀"), "_blank");
+}
+
+/* ================= TRAMPOLINE GAME ================= */
+const gameCanvas = document.getElementById("trampolineGame");
+const ctx = gameCanvas.getContext("2d");
+
+let y = 100, v = 0, g = 0.45, floor = 200;
+let score = 0, best = 0;
+let justBounced = false;   // ← New flag to detect natural landing
+
+function tap() {
+	const near = y > floor - 28 && y < floor + 12 && v > 0;
+	if (near) {
+		v = -13;
+		score += 10;
+		if (score > best) best = score;
+		justBounced = true;        // successful tap
+	} else {
+		v += 8;                    // stronger penalty on bad tap
+		score = 0;
+	}
+}
+
+gameCanvas.addEventListener("click", tap);
+gameCanvas.addEventListener("touchstart", e => { e.preventDefault(); tap(); });
+
+function gameLoop() {
+	ctx.clearRect(0, 0, gameCanvas.width, gameCanvas.height);
+
+	v += g;
+	y += v;
+
+	// Detect when ball lands
+	if (y >= floor) {
+		y = floor;
+		const oldV = v;
+		v *= -0.5;
+
+		// If it landed without a successful tap this cycle → reset
+		if (!justBounced && oldV > 0) {
+			score = 0;
+		}
+		justBounced = false;
+	}
+
+	// Draw trampoline
+	ctx.strokeStyle = "#00ffff"; 
+	ctx.lineWidth = 4;
+	ctx.beginPath(); 
+	ctx.moveTo(120, floor); 
+	ctx.lineTo(300, floor); 
+	ctx.stroke();
+
+	// Draw ball
+	ctx.fillStyle = "#fff";
+	ctx.beginPath(); 
+	ctx.arc(210, y, 10, 0, Math.PI * 2); 
+	ctx.fill();
+
+	// Update UI
+	document.getElementById("heightScore").innerText = score;
+	document.getElementById("bestScore").innerText = best;
+
+	requestAnimationFrame(gameLoop);
+}
+
+/* INIT */
+window.onload = () => {
+	initSpace();
+	animateSpace();
+	window.addEventListener("resize", resizeSpace);
+
+	setTimeout(() => document.getElementById("reveal").style.opacity = 1, 400);
+	setInterval(cycleTeaser, 3800);
+	gameLoop();
+};
+</script>
 </body>
 </html>
