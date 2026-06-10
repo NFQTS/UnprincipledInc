@@ -1,316 +1,284 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>✝️💕 Spread The Word 💕✝️</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-    <style>
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500&amp;family=Playfair+Display:wght@700&amp;display=swap');
-        
-        body { font-family: 'Inter', system_ui, sans-serif; }
-        .title { font-family: 'Playfair Display', sans-serif; }
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Asset Network</title>
 
-        .starfield {
-            position: fixed;
-            top: 0; left: 0;
-            width: 100%; height: 100%;
-            z-index: -1;
-            background: radial-gradient(circle at center, #0f001a 0%, #000 80%);
-            overflow: hidden;
-        }
-        .star { position: absolute; background: white; border-radius: 50%; animation: twinkle 3s infinite alternate; }
-        @keyframes twinkle { 0% { opacity: 0.2; } 100% { opacity: 1; } }
-        .meteor {
-            position: absolute; width: 3px; height: 80px;
-            background: linear-gradient(transparent, #c4d0ff);
-            animation: meteor 6s linear infinite;
-        }
-        @keyframes meteor { 0% { transform: translate(-100px, -100px); opacity: 1; } 100% { transform: translate(600px, 600px); opacity: 0; } }
+<style>
+    body {
+        margin: 0;
+        background: #0b0f17;
+        font-family: 'Inter', system-ui, sans-serif;
+        color: white;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        min-height: 100vh;
+        overflow: hidden;
+    }
 
-        .crypto-btn {
-            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-        .crypto-btn:hover { transform: scale(1.08) translateY(-4px); }
-    </style>
+    svg {
+        width: 1100px;
+        max-width: 95vw;
+        height: auto;
+        filter: drop-shadow(0 30px 60px rgba(0,0,0,0.7));
+    }
+
+    .line {
+        stroke: rgba(255,255,255,0.13);
+        stroke-width: 3;
+        stroke-dasharray: 12 8;
+        animation: dash 10s linear infinite;
+    }
+
+    @keyframes dash {
+        to { stroke-dashoffset: -40; }
+    }
+
+    .asset {
+        cursor: pointer;
+        transition: transform 0.45s cubic-bezier(0.34, 1.56, 0.64, 1);
+        transform-origin: center;
+    }
+
+    .asset:hover {
+        transform: scale(1.085);
+    }
+
+    .asset-image {
+        transition: filter 0.4s ease;
+    }
+
+    .asset:hover .asset-image {
+        filter: brightness(1.18) contrast(1.12) saturate(1.25);
+    }
+
+    .asset-ring {
+        fill: none;
+        stroke-width: 5.5;
+        transition: stroke-width 0.4s cubic-bezier(0.23, 1, 0.32, 1), 
+                    filter 0.4s ease;
+    }
+
+    .asset:hover .asset-ring {
+        stroke-width: 8.5;
+        filter: drop-shadow(0 0 22px currentColor);
+    }
+
+    .asset-pulse {
+        fill: none;
+        stroke: currentColor;
+        stroke-width: 2.5;
+        opacity: 0.22;
+        animation: pulse 4.2s ease-in-out infinite;
+    }
+
+    @keyframes pulse {
+        0%, 100% { r: 74; opacity: 0.18; }
+        50% { r: 85; opacity: 0.38; }
+    }
+
+    .label {
+        fill: #e2e8f0;
+        font-size: 15.5px;
+        font-weight: 600;
+        letter-spacing: 2.8px;
+        text-anchor: middle;
+        pointer-events: none;
+        transition: all 0.3s ease;
+        text-transform: uppercase;
+    }
+
+    .asset:hover .label {
+        fill: white;
+        font-size: 17px;
+    }
+
+    /* Modal */
+    #modal {
+        position: fixed;
+        top: 0; left: 0;
+        width: 100%; height: 100%;
+        background: rgba(11, 15, 23, 0.92);
+        display: none;
+        align-items: center;
+        justify-content: center;
+        z-index: 1000;
+        backdrop-filter: blur(12px);
+    }
+
+    .modal-content {
+        background: #161b2b;
+        border: 1px solid rgba(255,255,255,0.1);
+        border-radius: 20px;
+        width: 90%;
+        max-width: 460px;
+        padding: 50px 40px;
+        text-align: center;
+        box-shadow: 0 30px 80px rgba(0,0,0,0.6);
+    }
+
+    .modal-content h2 {
+        font-size: 28px;
+        margin: 0 0 16px 0;
+        color: #a5b4fc;
+    }
+
+    .modal-content p {
+        font-size: 17px;
+        opacity: 0.8;
+        line-height: 1.6;
+    }
+
+    .close-btn {
+        margin-top: 30px;
+        padding: 12px 32px;
+        background: transparent;
+        border: 1px solid #64748b;
+        color: #cbd5e1;
+        border-radius: 9999px;
+        font-size: 15px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+    }
+
+    .close-btn:hover {
+        background: #334155;
+        border-color: #94a3b8;
+        color: white;
+    }
+
+    .title {
+        position: absolute;
+        top: 40px;
+        font-size: 29px;
+        font-weight: 700;
+        letter-spacing: 7px;
+        opacity: 0.95;
+        text-transform: uppercase;
+    }
+
+    .footer {
+        margin-top: 35px;
+        opacity: 0.8;
+        font-size: 13.8px;
+        letter-spacing: 1px;
+        text-align: center;
+    }
+</style>
 </head>
-<body class="bg-black text-white overflow-x-hidden min-h-screen">
-    <div id="starfield" class="starfield"></div>
 
-    <!-- HERO -->
-    <div class="relative pt-20 pb-8 text-center px-6 max-w-3xl mx-auto">
-        <div class="inline text-xs tracking-[4px] text-indigo-300 mb-6">SPREADING GOD’S WORD</div>
-        <h1 class="title text-6xl md:text-7xl leading-none font-bold tracking-tighter mb-4">
-            Help us reach<br>the world
-        </h1>
+<body>
+
+<div class="title">Sustainable Asset Network</div>
+
+<svg viewBox="0 0 1100 620" xmlns="http://www.w3.org/2000/svg">
+
+    <!-- Connections -->
+    <line class="line" x1="260" y1="420" x2="550" y2="180"/>
+    <line class="line" x1="550" y1="180" x2="840" y2="420"/>
+    <line class="line" x1="260" y1="420" x2="840" y2="420"/>
+
+    <defs>
+        <clipPath id="clipAquatics">
+            <circle cx="260" cy="420" r="74"/>
+        </clipPath>
+        <clipPath id="clipArt">
+            <circle cx="550" cy="180" r="84"/>
+        </clipPath>
+        <clipPath id="clipNursery">
+            <circle cx="840" cy="420" r="66"/>
+        </clipPath>
+    </defs>
+
+    <!-- AQUATICS -->
+    <g class="asset" id="aquatics">
+        <image 
+            href="https://images.unsplash.com/photo-1544551763-46a013bb70d5" 
+            x="186" y="346" width="148" height="148"
+            clip-path="url(#clipAquatics)"
+            preserveAspectRatio="xMidYMid slice"
+            class="asset-image"
+        />
+        <circle class="asset-ring" cx="260" cy="420" r="74" stroke="#22d3ee"/>
+        <circle class="asset-pulse" cx="260" cy="420" r="74" stroke="#22d3ee"/>
+        <text class="label" x="260" y="528">AQUATICS</text>
+    </g>
+
+    <!-- ART -->
+    <g class="asset" id="art">
+        <image 
+            href="https://images.unsplash.com/photo-1549490349-8643362247b5" 
+            x="466" y="96" width="168" height="168"
+            clip-path="url(#clipArt)"
+            preserveAspectRatio="xMidYMid slice"
+            class="asset-image"
+        />
+        <circle class="asset-ring" cx="550" cy="180" r="84" stroke="#c026d3"/>
+        <circle class="asset-pulse" cx="550" cy="180" r="84" stroke="#c026d3"/>
+        <text class="label" x="550" y="292">ART</text>
+    </g>
+
+    <!-- NURSERY -->
+    <g class="asset" id="nursery">
+        <image 
+            href="https://images.unsplash.com/photo-1466692476868-aef1dfb1e735" 
+            x="774" y="354" width="132" height="132"
+            clip-path="url(#clipNursery)"
+            preserveAspectRatio="xMidYMid slice"
+            class="asset-image"
+        />
+        <circle class="asset-ring" cx="840" cy="420" r="66" stroke="#34d399"/>
+        <circle class="asset-pulse" cx="840" cy="420" r="66" stroke="#34d399"/>
+        <text class="label" x="840" y="518">NURSERY</text>
+    </g>
+
+</svg>
+
+<div class="footer">
+    Click nodes to explore • Unified scaling • Premium hover feedback
+</div>
+
+<!-- Modal -->
+<div id="modal">
+    <div class="modal-content">
+        <h2>Asset Details</h2>
+        <p id="modal-asset-name" style="font-size:22px; font-weight:600; margin:20px 0 10px;"></p>
+        <p>Coming soon — Full portfolio analytics, performance charts, and investment tools will appear here.</p>
+        <button class="close-btn" onclick="closeModal()">Close</button>
     </div>
+</div>
 
-    <!-- PROMPT FEATURE -->
-    <div class="max-w-4xl mx-auto px-6 pb-16">
-        <div class="bg-white/5 border border-white/10 rounded-3xl p-10 md:p-12">
-            <div class="text-center mb-8">
-                <div class="text-3xl font-medium">What’s weighing on your heart?</div>
-                <div class="text-white/60 mt-2">Describe your situation and receive a Bible verse that speaks directly to it.</div>
-            </div>
+<script>
+    const assets = document.querySelectorAll('.asset');
+    const modal = document.getElementById('modal');
+    const modalName = document.getElementById('modal-asset-name');
+
+    assets.forEach(asset => {
+        asset.addEventListener('click', () => {
+            const id = asset.id;
+            let name = '';
             
-            <div class="flex flex-col md:flex-row gap-4">
-                <input id="prompt-input" 
-                       type="text"
-                       placeholder="e.g. I feel anxious about tomorrow"
-                       class="flex-1 bg-black border border-white/20 focus:border-indigo-400 rounded-3xl px-8 py-6 text-lg placeholder:text-white/40 outline-none">
-                <button onclick="showComingSoon('prompt')"
-                        class="md:w-auto w-full px-10 py-6 bg-gradient-to-r from-indigo-500 to-purple-600 font-semibold rounded-3xl hover:brightness-110 transition-all flex items-center justify-center gap-3">
-                    <i class="fa-solid fa-sparkles"></i>
-                    Find God’s Answer
-                </button>
-            </div>
-        </div>
-    </div>
+            if (id === 'aquatics') name = 'Aquatics Fund';
+            else if (id === 'art') name = 'Digital Art Vault';
+            else if (id === 'nursery') name = 'Premium Nursery';
 
-    <!-- X POSTS SLIDER -->
-    <div class="max-w-5xl mx-auto px-6 pb-16">
-        <div class="flex items-center justify-between mb-6 px-2">
-            <div class="text-lg font-medium">Latest from X</div>
-            <div class="flex gap-4 text-2xl">
-                <button onclick="prevSlide()" class="hover:text-white/70">←</button>
-                <button onclick="nextSlide()" class="hover:text-white/70">→</button>
-            </div>
-        </div>
-        
-        <div class="relative rounded-3xl overflow-hidden shadow-2xl" style="height: 460px;">
-            <div id="slider" class="flex h-full transition-transform duration-700"></div>
-        </div>
-        <div class="text-center mt-4">
-            <a href="https://x.com/UnprincipledInc" target="_blank" 
-               class="inline-flex items-center gap-2 text-white/60 hover:text-white text-sm">
-                <i class="fa-brands fa-x-twitter"></i>
-                Follow @UnprincipledInc on X for more
-            </a>
-        </div>
-    </div>
+            modalName.textContent = name;
+            modal.style.display = 'flex';
+        });
+    });
 
-    <!-- BUY BIBLE + SHARE -->
-    <div class="max-w-4xl mx-auto px-6 pb-12">
-        <div class="grid md:grid-cols-2 gap-6 mb-8">
-            <!-- Buy a Bible -->
-            <a href="https://amzn.to/4v1r0By" target="_blank"
-               class="bg-white/5 hover:bg-white/10 border border-white/10 rounded-3xl p-8 flex flex-col justify-center items-center text-center transition-all group">
-                <i class="fa-solid fa-book-bible text-5xl mb-4 text-amber-300"></i>
-                <div class="font-medium text-xl group-hover:text-amber-300">Buy a Bible</div>
-                <div class="text-white/50 text-sm mt-1">Amazon Affiliate Link</div>
-            </a>
+    function closeModal() {
+        modal.style.display = 'none';
+    }
 
-            <!-- Share -->
-            <div onclick="shareX()" 
-                 class="bg-white/5 hover:bg-white/10 border border-white/10 rounded-3xl p-8 flex flex-col justify-center items-center text-center cursor-pointer transition-all group">
-                <i class="fa-brands fa-x-twitter text-5xl mb-4"></i>
-                <div class="font-medium text-xl group-hover:text-blue-400">Share on X</div>
-                <div class="text-white/50 text-sm mt-1">Help the Word spread</div>
-            </div>
-        </div>
-    </div>
+    // Close modal when clicking outside content
+    modal.addEventListener('click', (e) => {
+        if (e.target === modal) closeModal();
+    });
+</script>
 
-    <!-- CRYPTO DONATION -->
-    <div class="max-w-4xl mx-auto px-6 pb-16">
-        <div class="bg-white/5 border border-white/10 rounded-3xl p-8 md:p-12">
-            <div class="text-center mb-8">
-                <div class="text-2xl font-medium">Donate Crypto</div>
-                <div class="text-white/50 text-sm mt-1">Select coin • Address appears instantly</div>
-            </div>
-            
-            <div class="grid grid-cols-3 gap-6 max-w-md mx-auto" id="crypto-grid"></div>
-
-            <div id="address-box" class="hidden mt-10 bg-black/70 border border-white/20 rounded-2xl p-8 text-center">
-                <div class="flex justify-center gap-4 items-center mb-6">
-                    <span id="coin-icon" class="text-6xl"></span>
-                    <div>
-                        <div id="coin-name" class="text-2xl font-medium"></div>
-                        <div id="coin-symbol" class="text-white/40"></div>
-                    </div>
-                </div>
-                <div id="wallet-addr" 
-                     class="font-mono text-sm bg-black p-6 rounded-xl break-all text-emerald-300 select-all cursor-pointer"
-                     onclick="copyAddress()">
-                </div>
-                <div onclick="copyAddress()" 
-                     class="mt-6 inline-flex items-center gap-2 text-xs uppercase tracking-widest hover:text-white text-white/50 cursor-pointer">
-                    <i class="fa-solid fa-copy"></i> COPY ADDRESS
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- EMAIL OPT-IN -->
-    <div class="max-w-4xl mx-auto px-6 pb-20">
-        <div onclick="showComingSoon('email')" 
-             class="max-w-md mx-auto bg-white/5 border border-white/10 rounded-3xl p-8 text-center cursor-pointer hover:border-white/30 transition-all">
-            <i class="fa-solid fa-envelope text-4xl mb-4 text-indigo-400"></i>
-            <div class="text-sm text-white/60 mb-1">Daily Verse in your inbox</div>
-            <div class="text-white/40 text-xs">Coming soon • We apologize for the inconvenience</div>
-        </div>
-    </div>
-
-    <!-- COMING SOON MODAL -->
-    <div id="coming-soon-modal" class="hidden fixed inset-0 bg-black/80 flex items-center justify-center z-50">
-        <div class="bg-zinc-900 border border-white/20 rounded-3xl max-w-md w-full mx-4 p-10 text-center">
-            <div class="text-5xl mb-6">✝️</div>
-            <h3 id="modal-title" class="text-2xl font-medium mb-3">Coming Soon</h3>
-            <p id="modal-text" class="text-white/70 leading-relaxed"></p>
-            <button onclick="closeModal()" 
-                    class="mt-8 w-full py-5 bg-white text-black font-medium rounded-2xl hover:bg-white/90">
-                Got it, thank you
-            </button>
-        </div>
-    </div>
-
-    <script>
-        // X Posts (easy to update - just replace text and link)
-        const xPosts = [
-            {
-                text: "Genesis 1:1 — In the beginning God created the heavens and the earth.",
-                link: "https://x.com/UnprincipledInc"
-            },
-            {
-                text: "The Lord is my shepherd, I shall not want. Psalm 23",
-                link: "https://x.com/UnprincipledInc"
-            },
-            {
-                text: "Seek first the kingdom of God and His righteousness — Matthew 6:33",
-                link: "https://x.com/UnprincipledInc"
-            }
-            // Add more posts here by copying the pattern above
-        ];
-
-        let slideIndex = 0;
-
-        function populateXSlider() {
-            const container = document.getElementById('slider');
-            container.innerHTML = '';
-            xPosts.forEach(post => {
-                const slide = document.createElement('div');
-                slide.className = 'min-w-full h-full relative bg-gradient-to-br from-zinc-900 to-black flex items-center justify-center p-10';
-                slide.innerHTML = `
-                    <div class="max-w-lg text-center">
-                        <i class="fa-brands fa-x-twitter text-4xl mb-6 text-white/30"></i>
-                        <div class="text-xl leading-relaxed text-white/90">${post.text}</div>
-                        <a href="${post.link}" target="_blank"
-                           class="inline-flex items-center gap-2 mt-8 text-white/60 hover:text-white transition-colors">
-                            <i class="fa-brands fa-x-twitter"></i>
-                            View on X →
-                        </a>
-                    </div>
-                `;
-                container.appendChild(slide);
-            });
-        }
-
-        function updateSlider() {
-            document.getElementById('slider').style.transform = `translateX(-${slideIndex * 100}%)`;
-        }
-        function nextSlide() { 
-            slideIndex = (slideIndex + 1) % xPosts.length; 
-            updateSlider(); 
-        }
-        function prevSlide() { 
-            slideIndex = (slideIndex - 1 + xPosts.length) % xPosts.length; 
-            updateSlider(); 
-        }
-
-        // Coming Soon Modal
-        function showComingSoon(feature) {
-            const modal = document.getElementById('coming-soon-modal');
-            const titleEl = document.getElementById('modal-title');
-            const textEl = document.getElementById('modal-text');
-
-            if (feature === 'prompt') {
-                titleEl.textContent = "Bible Verse Finder";
-                textEl.textContent = "We’re building a powerful tool to match you with the perfect Bible verse. Thank you for your patience — it’s coming very soon!";
-            } else if (feature === 'email') {
-                titleEl.textContent = "Daily Verse Emails";
-                textEl.textContent = "Daily Bible verses straight to your inbox is coming soon. We apologize for the inconvenience and appreciate your support.";
-            }
-            modal.classList.remove('hidden');
-        }
-
-        function closeModal() {
-            document.getElementById('coming-soon-modal').classList.add('hidden');
-        }
-
-        // Crypto
-        const cryptos = [
-            {name:"Bitcoin", symbol:"BTC", icon:"₿", color:"text-orange-400", addr:"bc1qt7920ytslkkvkx6rcmffclgknvurn8umpuuz3g"},
-            {name:"Ethereum", symbol:"ETH", icon:"⟠", color:"text-indigo-400", addr:"0x73Fe0f0Fa44035607b9ddB5Ba560301Ae7C96a54"},
-            {name:"Solana", symbol:"SOL", icon:"◎", color:"text-purple-400", addr:"4CYdS9QxVS9tRYtkoi6WKNs1wYL81uSjAjrmjtJ2vT7A"}
-        ];
-
-        function populateCryptos() {
-            const grid = document.getElementById('crypto-grid');
-            grid.innerHTML = '';
-            cryptos.forEach((c, i) => {
-                const div = document.createElement('div');
-                div.className = `crypto-btn bg-black border border-white/10 hover:border-white/40 rounded-2xl p-6 text-center cursor-pointer`;
-                div.innerHTML = `<div class="text-6xl mb-3 ${c.color}">${c.icon}</div><div class="font-medium">${c.symbol}</div>`;
-                div.onclick = () => showAddress(i);
-                grid.appendChild(div);
-            });
-        }
-
-        let currentCrypto = null;
-        function showAddress(i) {
-            currentCrypto = cryptos[i];
-            const box = document.getElementById('address-box');
-            box.classList.remove('hidden');
-            document.getElementById('coin-icon').innerHTML = currentCrypto.icon;
-            document.getElementById('coin-name').textContent = currentCrypto.name;
-            document.getElementById('coin-symbol').textContent = currentCrypto.symbol;
-            document.getElementById('wallet-addr').textContent = currentCrypto.addr;
-        }
-        function copyAddress() {
-            if (!currentCrypto) return;
-            navigator.clipboard.writeText(currentCrypto.addr);
-            const el = document.getElementById('wallet-addr');
-            const orig = el.style.color;
-            el.style.color = '#22c55e';
-            setTimeout(() => el.style.color = orig, 1500);
-        }
-
-        function shareX() {
-            const msg = encodeURIComponent("Help us spread God’s Word one beautiful Bible verse at a time → unprincipledinc.com");
-            window.open(`https://x.com/intent/tweet?text=${msg}`, '_blank');
-        }
-
-        // Starfield
-        function createStars() {
-            const sf = document.getElementById('starfield');
-            for (let i = 0; i < 650; i++) {
-                const s = document.createElement('div');
-                s.className = 'star';
-                const sz = Math.random() * 2.8 + 0.6;
-                s.style.width = sz + 'px';
-                s.style.height = sz + 'px';
-                s.style.left = Math.random() * 100 + '%';
-                s.style.top = Math.random() * 100 + '%';
-                s.style.animationDelay = '-' + Math.random() * 4 + 's';
-                sf.appendChild(s);
-            }
-            setInterval(() => {
-                const m = document.createElement('div');
-                m.className = 'meteor';
-                m.style.left = Math.random() * 90 + '%';
-                m.style.top = '-80px';
-                sf.appendChild(m);
-                setTimeout(() => m.remove(), 7000);
-            }, 700);
-        }
-
-        // Initialize
-        window.onload = () => {
-            populateCryptos();
-            populateXSlider();
-            createStars();
-            setInterval(nextSlide, 6500);
-        };
-    </script>
 </body>
 </html>
